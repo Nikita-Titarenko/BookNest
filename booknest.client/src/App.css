@@ -1,0 +1,27 @@
+﻿#root {
+    margin: 0;
+    text-align: center;
+    height: 100%;
+
+    flex-direction: column;
+}
+
+main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+th, td {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+html, body{
+    height: 100%;
+    margin: 0px;
+}
+
+main{
+    margin: 0px 10rem 0px 10rem;
+}

@@ -1,0 +1,172 @@
+const API_BASE = "https://localhost:7079/api/";
+
+export interface HotelWithRoom {
+    hotel_id: number,
+    hotel_name: string,
+    hotel_city: string,
+    room_id: number,
+    room_name: string,
+    room_price: number
+};
+
+export interface HotelData {
+    hotelName: string,
+    hotelCity: string,
+    hotelDescription: string,
+};
+
+export interface HotelListItem {
+    hotel_id: number,
+    hotel_name: string,
+    hotel_city: string,
+    total_room_count: number
+};
+
+export interface CreateHotelResponse {
+    hotelId: number,
+};
+
+export const getHotelsWithCheapestRoom = async (startDateTime: string, endDateTime: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
+    const params = new URLSearchParams({
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+        ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
+    });
+    const response = await fetch(`${API_BASE}Hotels/with-cheapest-rooms?${params.toString()}`, {
+        method: 'GET'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data[0].metadata.Code);
+    }
+
+    return data;
+};
+
+export const getHotelsWithMostExpensiveRoom = async (startDateTime: string, endDateTime: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
+    const params = new URLSearchParams({
+        startDateTime: startDateTime,
+        endDateTime: endDateTime,
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+        ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
+    });
+    const response = await fetch(`${API_BASE}Hotels/with-most-expensive-rooms?${params.toString()}`, {
+        method: 'GET'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data[0].metadata.Code);
+    }
+
+    return data;
+};
+
+export const getHotelsByUser = async (): Promise<HotelListItem[]> => {
+    const token = localStorage.getItem('jwt-token');
+    if (token == null) {
+        throw new Error('You must register to create a hotel');
+    }
+
+    const response = await fetch(`${API_BASE}Hotels/by-user`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data[0].metadata.Code);
+    }
+
+    return data;
+};
+
+export const createHotel = async (data: HotelData): Promise<CreateHotelResponse> => {
+    const token = localStorage.getItem('jwt-token');
+    if (token == null) {
+        throw new Error('You must register to create a hotel');
+    }
+    const response = await fetch(`${API_BASE}Hotels`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+    const json = await response.json();
+
+    if (!response.ok) {
+        if (json[0].metadata.Code == '50002') {
+            throw new Error('Hotel name can not be empty');
+        }
+        if (json[0].metadata.Code == '50003') {
+            throw new Error('Hotel city can not be empty');
+        }
+        if (json[0].metadata.Code == '50004') {
+            throw new Error('You must register to create a hotel');
+        }
+        throw new Error(json[0].message);
+    }
+    return json;
+};
+
+export const updateHotel = async (hotelId: number, data: HotelData): Promise<void> => {
+    const token = localStorage.getItem('jwt-token');
+    if (token == null) {
+        throw new Error('You must register to create a hotel');
+    }
+    const response = await fetch(`${API_BASE}Hotels/${hotelId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify(data)
+    });
+
+    if (!response.ok) {
+        const json = await response.json();
+        if (json[0].metadata.Code == '50002') {
+            throw new Error('Hotel name can not be empty');
+        }
+        if (json[0].metadata.Code == '50003') {
+            throw new Error('Hotel city can not be empty');
+        }
+        if (json[0].metadata.Code == '50001') {
+            throw new Error('You must register to create a hotel');
+        }
+        throw new Error(json[0].message);
+    }
+};
+
+export const deleteHotel = async (hotelId: number): Promise<void> => {
+    const token = localStorage.getItem('jwt-token');
+    if (token == null) {
+        throw new Error('You must register to create a hotel');
+    }
+    const response = await fetch(`${API_BASE}Hotels/${hotelId}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': `Bearer ${token}`
+        },
+    });
+
+    if (!response.ok) {
+        const json = await response.json();
+        if (json[0].metadata.Code == '50001') {
+            throw new Error('The hotel cannot be found');
+        }
+
+        throw new Error(json[0].message);
+    }
+};
