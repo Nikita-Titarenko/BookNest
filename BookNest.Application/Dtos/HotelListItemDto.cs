@@ -2,9 +2,9 @@
 {
     public class HotelListItemDto
     {
-        public int hotel_id { get; set; }
-        public string hotel_name { get; set; } = string.Empty;
-        public string hotel_city { get; set; } = string.Empty;
-        public int total_room_count { get; set; }
+        public int HotelId { get; set; }
+        public string HotelName { get; set; } = string.Empty;
+        public string HotelCity { get; set; } = string.Empty;
+        public int TotalRoomCount { get; set; }
     }
 }

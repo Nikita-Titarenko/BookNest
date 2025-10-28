@@ -16,6 +16,10 @@ import HotelWithRooms from './pages/Hotels/HotelWithRooms';
 import RoomsByHotel from './pages/Rooms/RoomsByHotel';
 import EditRoom from './pages/Rooms/EditRoom';
 import CreateRoom from './pages/Rooms/CreateRoom';
+import MyBookings from './pages/Booking/MyBookings';
+import EditBooking from './pages/Booking/EditBooking';
+import BookingsByHotel from './pages/Booking/BookingsByHotel';
+import AuditBookingsByHotel from './pages/Booking/AuditBookingsByHotel';
 
 function App() {
 
@@ -36,6 +40,10 @@ function App() {
                         <Route path="/rooms-by-hotel" element={<RoomsByHotel />} />
                         <Route path="/edit-room" element={<EditRoom />} />
                         <Route path="/create-room" element={<CreateRoom />} />
+                        <Route path="/my-bookings" element={<MyBookings />} />
+                        <Route path="/edit-booking" element={<EditBooking />} />
+                        <Route path="/bookings-by-hotel" element={<BookingsByHotel />} />
+                        <Route path="/audit-bookings-by-hotel" element={<AuditBookingsByHotel />} />
                     </Routes>
                 </main>
                 <Footer />

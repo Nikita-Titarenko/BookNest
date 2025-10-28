@@ -58,7 +58,7 @@ const Register: React.FC = () => {
                     placeholder='phoneNumber'
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)} />
-                <button type='submit'>Register</button>
+                <button type='submit' className='btn btn-primary'>Register</button>
                 <p>{error}</p>
             </form>
         </div>

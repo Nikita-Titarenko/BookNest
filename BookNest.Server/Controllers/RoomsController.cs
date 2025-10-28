@@ -24,7 +24,7 @@ namespace BookNest.Server.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            var result = await _roomService.CreateRoom(dto, Convert.ToInt32(userId));
+            var result = await _roomService.CreateRoomAsync(dto, Convert.ToInt32(userId));
             if (!result.IsSuccess)
             {
                 return BadRequest(result.Errors);
@@ -39,7 +39,7 @@ namespace BookNest.Server.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            var result = await _roomService.UpdateRoom(id, dto, Convert.ToInt32(userId));
+            var result = await _roomService.UpdateRoomAsync(id, dto, Convert.ToInt32(userId));
             if (!result.IsSuccess)
             {
                 return BadRequest(result.Errors);
@@ -54,7 +54,7 @@ namespace BookNest.Server.Controllers
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            var result = await _roomService.DeleteRoom(id, Convert.ToInt32(userId));
+            var result = await _roomService.DeleteRoomAsync(id, Convert.ToInt32(userId));
             if (!result.IsSuccess)
             {
                 return BadRequest(result.Errors);
@@ -64,15 +64,27 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("by-hotel")]
-        public async Task<IActionResult> GetRoomsByHotel(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!)
+        public async Task<IActionResult> GetRoomsByHotel(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!, int? guestsNumber = null!)
         {
-            var result = await _roomService.GetRoomsByHotel(hotelId, startDateTime, endDateTime);
+            var result = await _roomService.GetRoomsByHotelAsync(hotelId, startDateTime, endDateTime, guestsNumber);
             if (!result.IsSuccess)
             {
                 return BadRequest(result.Errors);
             }
 
-            return Ok();
+            return Ok(result.Value);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRoom(int id)
+        {
+            var result = await _roomService.GetRoomAsync(id);
+            if (!result.IsSuccess)
+            {
+                return BadRequest(result.Errors);
+            }
+
+            return Ok(result.Value);
         }
     }
 }

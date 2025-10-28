@@ -19,6 +19,8 @@ namespace BookNest.Infrastructure
 
             services.Configure<JwtTokenOptions>(configuration.GetSection("Jwt"));
 
+            services.AddSingleton<IExecuteSafe, ExecuteSafe>();
+
             var token = configuration.GetSection("Jwt:Key").Value ?? throw new InvalidOperationException("Jwt key not fond");
             var issuer = configuration.GetSection("Jwt:Issuer").Value ?? throw new InvalidOperationException("Issuer not found");
             var audience = configuration.GetSection("Jwt:Audience").Value ?? throw new InvalidOperationException("Audience not found");

@@ -17,10 +17,16 @@ th, td {
     padding-right: 1rem;
 }
 
-html, body{
-    height: 100%;
-    margin: 0px;
-}
+    html{
+        margin: 0px;
+        padding: 0px;
+        height: 100%;
+    }
+
+    body {
+        margin: 0.5rem 2rem 0.5rem 2rem;
+        max-height: 100%;
+    }
 
 main{
     margin: 0px 10rem 0px 10rem;

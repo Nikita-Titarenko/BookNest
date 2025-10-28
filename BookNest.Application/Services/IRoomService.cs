@@ -5,9 +5,10 @@ namespace BookNest.Application.Services
 {
     public interface IRoomService
     {
-        Task<Result<int>> CreateRoom(CreateRoomDto dto, int appUserId);
-        Task<Result<int>> DeleteRoom(int roomId, int appUserId);
-        Task<Result<IEnumerable<RoomListItemDto>>> GetRoomsByHotel(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!);
-        Task<Result> UpdateRoom(int roomId, RoomDto dto, int appUserId);
+        Task<Result<int>> CreateRoomAsync(CreateRoomDto dto, int appUserId);
+        Task<Result<int>> DeleteRoomAsync(int roomId, int appUserId);
+        Task<Result<RoomListItemDto>> GetRoomAsync(int roomId);
+        Task<Result<IEnumerable<RoomListItemDto>>> GetRoomsByHotelAsync(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!, int? guestsNumber = null!);
+        Task<Result> UpdateRoomAsync(int roomId, RoomDto dto, int appUserId);
     }
 }

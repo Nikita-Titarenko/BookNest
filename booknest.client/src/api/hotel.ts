@@ -1,12 +1,12 @@
 const API_BASE = "https://localhost:7079/api/";
 
 export interface HotelWithRoom {
-    hotel_id: number,
-    hotel_name: string,
-    hotel_city: string,
-    room_id: number,
-    room_name: string,
-    room_price: number
+    hotelId: number,
+    hotelName: string,
+    hotelCity: string,
+    roomId: number,
+    roomName: string,
+    roomPrice: number
 };
 
 export interface HotelData {
@@ -16,14 +16,18 @@ export interface HotelData {
 };
 
 export interface HotelListItem {
-    hotel_id: number,
-    hotel_name: string,
-    hotel_city: string,
-    total_room_count: number
+    hotelId: number,
+    hotelName: string,
+    hotelCity: string,
+    totalRoomCount: number
 };
 
 export interface CreateHotelResponse {
     hotelId: number,
+};
+
+export interface GetHotelNameResponse {
+    hotelName: string,
 };
 
 export const getHotelsWithCheapestRoom = async (startDateTime: string, endDateTime: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
@@ -56,6 +60,34 @@ export const getHotelsWithMostExpensiveRoom = async (startDateTime: string, endD
         ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
     });
     const response = await fetch(`${API_BASE}Hotels/with-most-expensive-rooms?${params.toString()}`, {
+        method: 'GET'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data[0].metadata.Code);
+    }
+
+    return data;
+};
+
+export const getHotel = async (hotelId: number): Promise<HotelData> => {
+    const response = await fetch(`${API_BASE}Hotels/${hotelId}`, {
+        method: 'GET'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data[0].metadata.Code);
+    }
+
+    return data;
+};
+
+export const getHotelName = async (hotelId: number): Promise<GetHotelNameResponse> => {
+    const response = await fetch(`${API_BASE}Hotels/${hotelId}/name`, {
         method: 'GET'
     });
 

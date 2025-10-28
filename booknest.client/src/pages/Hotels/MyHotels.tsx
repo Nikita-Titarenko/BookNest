@@ -20,7 +20,7 @@ const MyHotels: React.FC = () => {
         try {
             await deleteHotel(hotelId);
             const hotels = myHotels.filter((hotel) => {
-                return hotel.hotel_id != hotelId
+                return hotel.hotelId != hotelId
             });
 
             setMyHotels(hotels);
@@ -35,7 +35,7 @@ const MyHotels: React.FC = () => {
     return (
       <>
       <div className='horizontal ms-auto'>
-          <Link to='/create-hotel'>Add hotel</Link>
+                <Link to='/create-hotel' className='btn btn-primary'>Add hotel</Link>
       </div>
             <table className='mb-auto'>
               <thead>
@@ -60,34 +60,39 @@ const MyHotels: React.FC = () => {
               <tbody>
                   {
                       myHotels.map((hotel) => (
-                          <tr id={ hotel.hotel_id.toString() }>
+                          <tr key={ hotel.hotelId.toString() }>
                               <th>
                                   <p>
-                                      { hotel.hotel_name }
+                                      { hotel.hotelName }
                                   </p>
                               </th>
                               <th>
                                   <p>
-                                      { hotel.hotel_city }
+                                      { hotel.hotelCity }
                                   </p>
                               </th>
                               <th>
                                   <p>
-                                      {hotel.total_room_count}
+                                      {hotel.totalRoomCount}
                                   </p>
                               </th>
                               <th>
-                                  <Link to={`/rooms-by-hotel?id=${hotel.hotel_id}`}>
+                                  <Link to={`/bookings-by-hotel?hotelId=${hotel.hotelId}`} className='btn btn-secondary'>
+                                      See bookings
+                                  </Link>
+                              </th>
+                              <th>
+                                  <Link to={`/rooms-by-hotel?id=${hotel.hotelId}`} className='btn btn-secondary'>
                                       See rooms
                                   </Link>
                               </th>
                               <th>
-                                  <Link to={`/edit-hotel?id=${hotel.hotel_id}`}>
+                                  <Link to={`/edit-hotel?id=${hotel.hotelId}`} className='btn btn-secondary'>
                                       Edit
                                   </Link>
                               </th>
                               <th>
-                                  <button onClick={() => { deleteHotelHandle(hotel.hotel_id) } }>
+                                  <button onClick={() => { deleteHotelHandle(hotel.hotelId) }} className='btn btn-danger'>
                                       Delete
                                   </button>
                               </th>

@@ -10,6 +10,8 @@ namespace BookNest.Infrastructure
         {
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IHotelService, HotelService>();
+            services.AddScoped<IRoomService, RoomService>();
+            services.AddScoped<IUserRoomService, UserRoomService>();
             services.AddScoped<IJwtTokenService, JwtTokenService>();
             return services;
         }

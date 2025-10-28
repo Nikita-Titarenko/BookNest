@@ -1,33 +1,46 @@
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import type { HotelListItem } from "../../api/hotel";
-import { deleteHotel, getHotelsByUser } from "../../api/hotel";
-import { getRoomsByHotel, type RoomListItem } from "../../api/room";
+import { deleteRoom, getRoomsByHotel, type RoomListItem } from "../../api/room";
+import { getHotelName } from "../../api/hotel";
 
 const RoomsByHotel: React.FC = () => {
     const [myRooms, setMyRooms] = useState<RoomListItem[]>([]);
 
+    const [hotelName, setHotelName] = useState('');
+
     const [error, setError] = useState("");
 
-    const [ searchParams ] = useSearchParams();
+    const [searchParams] = useSearchParams();
+
+    const [hotelId, setHotelId] = useState<Number>();
 
     useEffect(() => {
+        const id = searchParams.get('id');
+        setHotelId(Number(id));
         const getRooms = async () => {
-            const hotelId = searchParams.get('id');
-            if (hotelId) {
-                const rooms = await getRoomsByHotel(hotelId, null, null);
+            if (id) {
+                const rooms = await getRoomsByHotel(Number(id), null, null, null);
                 setMyRooms(rooms);
             }
-
         };
+        
         getRooms();
+
+        const getName = async () => {
+            if (id) {
+                const hotelName = await getHotelName(Number(id));
+                setHotelName(hotelName.hotelName);
+            }
+        };
+
+        getName();
     }, []);
 
-    const deleteRoomHandle = async (hotelId: number) => {
+    const deleteRoomHandle = async (roomId: number) => {
         try {
-            await deleteHotel(hotelId);
-            const rooms = myRooms.filter((hotel) => {
-                return hotel.hotel_id != hotelId
+            await deleteRoom(roomId);
+            const rooms = myRooms.filter((room) => {
+                return room.roomId != roomId
             });
 
             setMyRooms(rooms);
@@ -42,59 +55,65 @@ const RoomsByHotel: React.FC = () => {
     return (
         <>
             <div className='horizontal ms-auto'>
-                <Link to='/create-hotel'>Add hotel</Link>
+                <Link to={`/create-room?id=${hotelId}` } className='btn btn-primary'>Add room</Link>
             </div>
+            <h2>Rooms of the { hotelName } hotel</h2>
             <table className='mb-auto'>
                 <thead>
                     <tr>
                         <th>
                             <p>
-                                Hotel name
+                                Room name
                             </p>
                         </th>
                         <th>
                             <p>
-                                Hotel city
+                                Room price (UAH)
                             </p>
                         </th>
                         <th>
                             <p>
-                                Rooms count
+                                Room size (m<sup>2</sup>)
+                            </p>
+                        </th>
+                        <th>
+                            <p>
+                                Room quantity
                             </p>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
                     {
-                        myRooms.map((hotel) => (
-                            <tr id={hotel.hotel_id.toString()}>
+                        myRooms.map((room) => (
+                            <tr key={ room.roomId }>
                                 <th>
                                     <p>
-                                        {hotel.hotel_name}
+                                        {room.roomName}
                                     </p>
                                 </th>
                                 <th>
                                     <p>
-                                        {hotel.hotel_city}
+                                        {room.roomPrice}
                                     </p>
                                 </th>
                                 <th>
                                     <p>
-                                        {hotel.total_room_count}
+                                        {room.roomSize}
                                     </p>
                                 </th>
                                 <th>
-                                    <Link to={`/rooms-by-hotel?id=${hotel.hotel_id}`}>
-                                        See rooms
-                                    </Link>
+                                    <p>
+                                        {room.roomQuantity}
+                                    </p>
                                 </th>
                                 <th>
-                                    <Link to={`/edit-hotel?id=${hotel.hotel_id}`}>
+                                    <Link to={`/edit-room?room-id=${room.roomId}&hotel-id=${hotelId}`} className='btn btn-secondary'>
                                         Edit
                                     </Link>
                                 </th>
                                 <th>
-                                    <button onClick={() => { deleteRoomHandle(hotel.hotel_id) }}>
+                                    <button onClick={() => { deleteRoomHandle(room.roomId) }} className='btn btn-danger'>
                                         Delete
                                     </button>
                                 </th>

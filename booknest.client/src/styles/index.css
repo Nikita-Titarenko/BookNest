@@ -48,6 +48,10 @@
     margin-bottom: 3rem;
 }
 
+.mb-5 {
+    margin-bottom: 5rem;
+}
+
 .mb-auto {
     margin-bottom: auto;
 }
@@ -75,4 +79,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.btn {
+    padding: 1rem;
+    color: white;
+    border-radius: 1rem;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #3CB371;
+}
+
+.btn-secondary {
+    background-color: #008B8B;
+}
+
+.btn-danger {
+    background-color: #DC143C;
+}
+
+.logo{
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    font-size: 3rem;
 }

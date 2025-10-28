@@ -1,12 +1,12 @@
 ﻿namespace BookNest.Application.Dtos
 {
-    public class HotelWithRoomListItemDto
+    public class RoomBookingByUserDto
     {
+        public int RoomId { get; set; }
         public int HotelId { get; set; }
         public string HotelName { get; set; } = string.Empty;
-        public string HotelCity { get; set; } = string.Empty;
-        public int RoomId { get; set; }
         public string RoomName { get; set; } = string.Empty;
-        public int RoomPrice { get; set; }
+        public DateOnly StartDate { get; set; }
+        public DateOnly EndDate { get; set; }
     }
 }

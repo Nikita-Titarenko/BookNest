@@ -44,7 +44,7 @@ const CreateHotel: React.FC = () => {
                     placeholder='Description'
                     value={hotelDescription}
                     onChange={(e) => setHotelDescription(e.target.value)} />
-                <button type='submit'>Create hotel</button>
+                <button type='submit' className='btn btn-primary'>Create hotel</button>
                 <p>{error}</p>
             </form>
         </div>

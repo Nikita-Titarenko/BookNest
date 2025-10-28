@@ -2,8 +2,6 @@
 using BookNest.Application.Dtos;
 using BookNest.Application.Services;
 using FluentResults;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,15 +10,49 @@ namespace BookNest.Infrastructure.Services
     public class HotelService : IHotelService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IExecuteSafe _executeSafe;
 
-        public HotelService(ApplicationDbContext context)
+        public HotelService(ApplicationDbContext context, IExecuteSafe executeSafe)
         {
             _context = context;
+            _executeSafe = executeSafe;
         }
 
-        public async Task<Result<IEnumerable<HotelListItemDto>>> GetHotelsByUser(int userId)
+        public async Task<Result<string>> GetHotelNameAsync(int hotelId)
         {
-            try
+            return await _executeSafe.ExecuteSafeAsync(async () =>
+            {
+                var hotelName = await _context.Hotels
+                    .Select(h => _context.GetHotelName(hotelId))
+                    .FirstOrDefaultAsync();
+                if (hotelName == null)
+                {
+                    return Result.Fail(new Error("Hotel not found").WithMetadata("Code", 50017));
+                }
+                return Result.Ok(hotelName);
+            });
+        }
+
+        public async Task<Result<HotelDto>> GetHotelAsync(int hotelId)
+        {
+            return await _executeSafe.ExecuteSafeAsync(async () =>
+            {
+                var dto = await _context
+                    .GetHotel(hotelId)
+                    .FirstOrDefaultAsync();
+
+                if (dto == null)
+                {
+                    return Result.Fail(new Error("Hotel not found").WithMetadata("Code", 50017));
+                }
+
+                return Result.Ok(dto);
+            });
+        }
+
+        public async Task<Result<IEnumerable<HotelListItemDto>>> GetHotelsByUserAsync(int userId)
+        {
+            return await _executeSafe.ExecuteSafeAsync(async () =>
             {
                 IEnumerable<HotelListItemDto> hotels = await _context
                     .GetHotelsByUser(userId)
@@ -32,16 +64,13 @@ namespace BookNest.Infrastructure.Services
                 }
 
                 return Result.Ok(hotels);
-            }
-            catch (Exception ex)
-            {
-                return Result.Fail(new Error(ex.Message).WithMetadata("Code", 1));
-            }
+            });
         }
 
-        public async Task<Result<IEnumerable<HotelWithRoomListItemDto>>> GetHotelsWithCheapestRooms(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
+        public async Task<Result<IEnumerable<HotelWithRoomListItemDto>>> GetHotelsWithCheapestRoomsAsync(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
         {
-            try {
+            return await _executeSafe.ExecuteSafeAsync(async () =>
+            {
                 IEnumerable<HotelWithRoomListItemDto> hotels = await _context
                     .GetHotelsWithCheapestRoom(startDate, endDate, pageNumber, pageSize, guestsNumber)
                     .ToListAsync();
@@ -52,14 +81,10 @@ namespace BookNest.Infrastructure.Services
                 }
 
                 return Result.Ok(hotels);
-            }
-            catch (SqlException ex)
-            {
-                return Result.Fail(new Error(ex.Message).WithMetadata("Code", ex.Number));
-            }
+            });
         }
 
-        public async Task<Result<IEnumerable<HotelWithRoomListItemDto>>> GetHotelsWithMostExpensiveRooms(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
+        public async Task<Result<IEnumerable<HotelWithRoomListItemDto>>> GetHotelsWithMostExpensiveRoomsAsync(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
         {
             IEnumerable<HotelWithRoomListItemDto> hotels = await _context
                 .GetHotelsWithMostExpensiveRoom(startDate, endDate, pageNumber, pageSize, guestsNumber)
@@ -73,9 +98,9 @@ namespace BookNest.Infrastructure.Services
             return Result.Ok(hotels);
         }
 
-        public async Task<Result<int>> CreateHotel(int appUserId, HotelDto hotelDto)
+        public async Task<Result<int>> CreateHotelAsync(int appUserId, HotelDto hotelDto)
         {
-            try
+            return await _executeSafe.ExecuteSafeAsync(async () =>
             {
                 var hotelIdParameter = new SqlParameter("@HotelId", SqlDbType.Int)
                 {
@@ -91,16 +116,12 @@ namespace BookNest.Infrastructure.Services
                         hotelIdParameter);
 
                 return Result.Ok((int)hotelIdParameter.Value);
-            }
-            catch (SqlException ex)
-            {
-                return Result.Fail(new Error(ex.Message).WithMetadata("Code", ex.Number));
-            }
+            });
         }
 
-        public async Task<Result> UpdateHotel(int appUserId, int hotelId, HotelDto hotelDto)
+        public async Task<Result> UpdateHotelAsync(int appUserId, int hotelId, HotelDto hotelDto)
         {
-            try
+            return await _executeSafe.ExecuteSafeAsync(async () =>
             {
                 await _context.Database
                     .ExecuteSqlRawAsync("EXEC dbo.UpdateHotel @HotelId, @AppUserId, @HotelName, @HotelDescription, @HotelCity",
@@ -111,16 +132,12 @@ namespace BookNest.Infrastructure.Services
                         new SqlParameter("@HotelCity", hotelDto.HotelCity));
 
                 return Result.Ok();
-            }
-            catch (SqlException ex)
-            {
-                return Result.Fail(new Error(ex.Message).WithMetadata("Code", ex.Number));
-            }
+            });
         }
 
-        public async Task<Result> DeleteHotel(int hotelId, int appUserId)
+        public async Task<Result> DeleteHotelAsync(int hotelId, int appUserId)
         {
-            try
+            return await _executeSafe.ExecuteSafeAsync(async () =>
             {
                 await _context.Database
                     .ExecuteSqlRawAsync("EXEC dbo.DeleteHotel @HotelId, @AppUserId",
@@ -128,11 +145,7 @@ namespace BookNest.Infrastructure.Services
                         new SqlParameter("@HotelId", hotelId));
 
                 return Result.Ok();
-            }
-            catch (SqlException ex)
-            {
-                return Result.Fail(new Error(ex.Message).WithMetadata("Code", ex.Number));
-            }
+            });
         }
     }
 }
