@@ -22,7 +22,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> GetRoomBookings(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -36,7 +36,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("by-user")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> GetRoomBookingsByUser()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -50,7 +50,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("by-hotel")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> GetRoomBookingsByHotel(int hotelId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -64,7 +64,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("audit-by-hotel")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> GetAuditRoomBookingsByHotel(int hotelId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -78,7 +78,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> BookRoom(BookingDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -93,7 +93,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> UpdateRoomBooking(int id, BookingDto dto)
         {
             if (id != dto.RoomId)
@@ -112,7 +112,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> DeleteRoomBooking(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;

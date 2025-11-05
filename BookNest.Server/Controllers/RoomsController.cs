@@ -19,7 +19,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> CreateRoom(CreateRoomDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -34,7 +34,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> UpdateRoom(int id, RoomDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -49,7 +49,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> DeleteHotel(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;

@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using BookNest.Infrastructure.Options;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,7 +25,10 @@ namespace BookNest.Infrastructure
             var token = configuration.GetSection("Jwt:Key").Value ?? throw new InvalidOperationException("Jwt key not fond");
             var issuer = configuration.GetSection("Jwt:Issuer").Value ?? throw new InvalidOperationException("Issuer not found");
             var audience = configuration.GetSection("Jwt:Audience").Value ?? throw new InvalidOperationException("Audience not found");
-            services.AddAuthentication()
+            services.AddAuthentication(opt =>
+            {
+                opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
                 .AddJwtBearer(opt =>
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters

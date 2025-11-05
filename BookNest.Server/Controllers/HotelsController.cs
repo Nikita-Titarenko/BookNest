@@ -20,7 +20,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("by-user")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> GetHotelsByUser()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -86,7 +86,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> CreateHotel(HotelDto hotelDto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -94,6 +94,11 @@ namespace BookNest.Server.Controllers
             var result = await _hotelService.CreateHotelAsync(Convert.ToInt32(userId), hotelDto);
             if (!result.IsSuccess)
             {
+                if (result.Errors.Any(e => e.Metadata.ContainsValue("50004")))
+                {
+                    return NotFound(result.Errors);
+                }
+
                 return BadRequest(result.Errors);
             }
 
@@ -104,7 +109,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> EditHotel(int id, HotelDto hotelDto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -119,7 +124,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+        [Authorize]
         public async Task<IActionResult> DeleteHotel(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;

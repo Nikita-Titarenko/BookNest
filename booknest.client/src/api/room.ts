@@ -75,7 +75,7 @@ export const getRoomsByHotel = async (hotelId: Number, startDate: string | null,
 
 export const createRoom = async (data: CreateRoomData): Promise<CreateRoomResponse> => {
     const token = localStorage.getItem('jwt-token');
-    if (token == null) {
+    if (!token) {
         throw new Error('You must register to create a hotel');
     }
     const response = await fetch(`${API_BASE}Rooms`, {
@@ -111,7 +111,7 @@ export const createRoom = async (data: CreateRoomData): Promise<CreateRoomRespon
 
 export const updateRoom = async (roomId: number, data: UpdateRoomData): Promise<void> => {
     const token = localStorage.getItem('jwt-token');
-    if (token == null) {
+    if (!token) {
         throw new Error('You must register to create a hotel');
     }
     const response = await fetch(`${API_BASE}Rooms/${roomId}`, {
@@ -149,7 +149,7 @@ export const updateRoom = async (roomId: number, data: UpdateRoomData): Promise<
 
 export const deleteRoom = async (roomId: number): Promise<void> => {
     const token = localStorage.getItem('jwt-token');
-    if (token == null) {
+    if (!token) {
         throw new Error('You must register to create a hotel');
     }
     const response = await fetch(`${API_BASE}Rooms/${roomId}`, {
