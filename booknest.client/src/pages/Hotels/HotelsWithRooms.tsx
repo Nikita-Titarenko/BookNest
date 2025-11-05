@@ -98,7 +98,7 @@ const HotelsWithRooms: React.FC = () => {
                 <input
                     type="number"
                     placeholder="Guests number"
-                    value={guestsNumber == null ? '' : guestsNumber}
+                    value={guestsNumber === null ? '' : guestsNumber}
                     onChange={e => setGuestsNumber(Number(e.target.value))}
                 />
                 <select value={selectedFilter} onChange={e => setSelectedFilter(e.target.value)}>
@@ -120,7 +120,7 @@ const HotelsWithRooms: React.FC = () => {
                                     <p>{hr.roomName}</p>
                                     <p>{hr.roomPrice.toString()} UAH</p>
                                 </div>
-                                <Link to={`/hotel-with-rooms?hotel-id=${hr.hotelId}&startDate=${startDate}&endDate=${endDate}${guestsNumber != null ? `&guestsNumber=${guestsNumber})` : ''}`} className="ms-auto btn btn-primary">See</Link>
+                                <Link to={`/hotel-with-rooms?hotel-id=${hr.hotelId}&startDate=${startDate}&endDate=${endDate}${guestsNumber !== null ? `&guestsNumber=${guestsNumber}` : ''}`} className="ms-auto btn btn-primary">See</Link>
                             </div>
                         );
                 })}

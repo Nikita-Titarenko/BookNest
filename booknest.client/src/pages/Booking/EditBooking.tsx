@@ -15,7 +15,7 @@ const EditBooking: React.FC = () => {
 
     const roomId = searchParams.get('room-id');
 
-    const parseRoomId = roomId != null ? Number(roomId) : null;
+    const parseRoomId = roomId !== null ? Number(roomId) : null;
 
     useEffect(() => {
         

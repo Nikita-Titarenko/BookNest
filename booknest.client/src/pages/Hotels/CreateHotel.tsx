@@ -33,11 +33,13 @@ const CreateHotel: React.FC = () => {
                 <input
                     type="text"
                     placeholder="Hotel name"
+                    required
                     value={hotelName}
                     onChange={(e) => setHotelName(e.target.value)} />
                 <input
                     type="text"
                     placeholder="City"
+                    required
                     value={hotelCity}
                     onChange={(e) => setHotelCity(e.target.value)} />
                 <textarea

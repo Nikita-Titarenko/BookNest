@@ -17,7 +17,7 @@ const HotelWithRooms: React.FC = () => {
 
     const hotelId: string | null = searchParams.get('hotel-id');
 
-    const parseHotelId: number | null = hotelId != null ? Number(hotelId) : null;
+    const parseHotelId: number | null = hotelId !== null ? Number(hotelId) : null;
 
     const navigate = useNavigate();
 
@@ -96,9 +96,7 @@ const HotelWithRooms: React.FC = () => {
             }
             catch (err) {
                 if (err instanceof Error) {
-                    if (err.message == 'EmailOrPasswordIncorrect') {
-                        setError('Login failed');
-                    }
+                    setError(err.message);
                 }
             }
         };
@@ -123,7 +121,7 @@ const HotelWithRooms: React.FC = () => {
                 <input
                     type="number"
                     placeholder="Guests number"
-                    value={guestsNumber == null ? '' : guestsNumber}
+                    value={guestsNumber === null ? '' : guestsNumber}
                     onChange={(e) => { setGuestsNumber(Number(e.target.value)) }}
                 ></input>
             </form>

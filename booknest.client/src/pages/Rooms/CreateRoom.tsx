@@ -23,7 +23,7 @@ const CreateRoom: React.FC = () => {
         e.preventDefault();
 
         try {
-            if (roomPrice == null || roomQuantity == null || guestsNumber == null || roomSize == null) {
+            if (!roomPrice || !roomQuantity || !guestsNumber || !roomSize) {
                 setError('All fields must be entered');
                 return;
             }
@@ -54,23 +54,23 @@ const CreateRoom: React.FC = () => {
                 <input
                     type="number"
                     placeholder="Price (UAH)"
-                    value={roomPrice == null ? '' : roomPrice}
+                    value={roomPrice === null ? '' : roomPrice}
                     onChange={(e) => setRoomPrice(Number(e.target.value))} />
                 <input
                     type="number"
                     placeholder="Room quantity"
-                    value={roomQuantity == null ? '' : roomQuantity}
+                    value={roomQuantity === null ? '' : roomQuantity}
                     onChange={(e) => setRoomQuantity(Number(e.target.value))} />
                 <input
                     type="number"
                     placeholder="Size (m&sup2;)"
                     step="any"
-                    value={roomSize == null ? '' : roomSize}
+                    value={roomSize === null ? '' : roomSize}
                     onChange={(e) => setRoomSize(Number(e.target.value))} />
                 <input
                     type="number"
                     placeholder="Guests number"
-                    value={guestsNumber == null ? '' : guestsNumber}
+                    value={guestsNumber === null ? '' : guestsNumber}
                     onChange={(e) => setGuestsNumber(Number(e.target.value))} />
                 <button type="submit" className="btn btn-primary">Create room</button>
                 <p>{error}</p>

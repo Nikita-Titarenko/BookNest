@@ -148,10 +148,10 @@ export const bookRoom = async (data: BookRoomData): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code == '50015') {
+        if (json[0].metadata.Code === 50015) {
             throw new Error('All rooms already booked on this date');
         }
-        if (json[0].metadata.Code == '50016') {
+        if (json[0].metadata.Code === 50016) {
             throw new Error('Booking already exists');
         }
         throw new Error(json[0].message);
@@ -174,7 +174,7 @@ export const updateRoomBooking = async (data: BookRoomData): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code == '50015') {
+        if (json[0].metadata.Code === 50015) {
             throw new Error('All rooms already booked on this date');
         }
         throw new Error(json[0].message);

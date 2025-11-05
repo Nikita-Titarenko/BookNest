@@ -36,7 +36,7 @@ export const getHotelsWithCheapestRoom = async (startDate: string, endDate: stri
         endDate: endDate,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
-        ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
+        ...(guestsNumber !== null && { guestsNumber: guestsNumber.toString() })
     });
     const response = await fetch(`${API_BASE}Hotels/with-cheapest-rooms?${params.toString()}`, {
         method: 'GET'
@@ -57,7 +57,7 @@ export const getHotelsWithMostExpensiveRoom = async (startDate: string, endDate:
         endDate: endDate,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
-        ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
+        ...(guestsNumber !== null && { guestsNumber: guestsNumber.toString() })
     });
     const response = await fetch(`${API_BASE}Hotels/with-most-expensive-rooms?${params.toString()}`, {
         method: 'GET'
@@ -138,13 +138,13 @@ export const createHotel = async (data: HotelData): Promise<CreateHotelResponse>
     const json = await response.json();
 
     if (!response.ok) {
-        if (json[0].metadata.Code == '50002') {
+        if (json[0].metadata.Code === 50002) {
             throw new Error('Hotel name can not be empty');
         }
-        if (json[0].metadata.Code == '50003') {
+        if (json[0].metadata.Code === 50003) {
             throw new Error('Hotel city can not be empty');
         }
-        if (json[0].metadata.Code == '50004') {
+        if (json[0].metadata.Code === 50004) {
             throw new Error('You must register to create a hotel');
         }
         throw new Error(json[0].message);
@@ -168,13 +168,13 @@ export const updateHotel = async (hotelId: number, data: HotelData): Promise<voi
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code == '50002') {
+        if (json[0].metadata.Code === 50002) {
             throw new Error('Hotel name can not be empty');
         }
-        if (json[0].metadata.Code == '50003') {
+        if (json[0].metadata.Code === 50003) {
             throw new Error('Hotel city can not be empty');
         }
-        if (json[0].metadata.Code == '50001') {
+        if (json[0].metadata.Code === 50001) {
             throw new Error('You must register to create a hotel');
         }
         throw new Error(json[0].message);
@@ -195,7 +195,7 @@ export const deleteHotel = async (hotelId: number): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code == '50001') {
+        if (json[0].metadata.Code === 50001) {
             throw new Error('The hotel cannot be found');
         }
 
