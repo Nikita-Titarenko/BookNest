@@ -40,7 +40,7 @@ const EditRoom: React.FC = () => {
         e.preventDefault();
 
         try {
-            if (!roomPrice || !roomQuantity || !guestsNumber || !roomSize) {
+            if (roomPrice == null || roomQuantity == null || guestsNumber == null || roomSize == null) {
                 setError('All fields must be entered');
                 return;
             }

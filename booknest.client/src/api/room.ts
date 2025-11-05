@@ -52,24 +52,16 @@ export const getRoom = async (roomId: Number): Promise<RoomData> => {
     return data;
 };
 
-export const getRoomsByHotel = async (hotelId: Number, startDateTime: string | null, endDateTime: string | null, guestsNumber: number | null): Promise<RoomListItem[]> => {
-    const token = localStorage.getItem('jwt-token');
-    if (token == null) {
-        throw new Error('You must register to get your rooms');
-    }
-
+export const getRoomsByHotel = async (hotelId: Number, startDate: string | null, endDate: string | null, guestsNumber: number | null): Promise<RoomListItem[]> => {
     const params = new URLSearchParams({
         hotelId: hotelId.toString(),
-        ...(startDateTime != null && { startDateTime: startDateTime }),
-        ...(endDateTime != null && { endDateTime: endDateTime }),
+        ...(startDate != null && { startDate: startDate }),
+        ...(endDate != null && { endDate: endDate }),
         ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
     });
 
     const response = await fetch(`${API_BASE}Rooms/by-hotel?${params.toString()}`, {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        },
+        method: 'GET'
     });
 
     const data = await response.json();

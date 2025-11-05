@@ -41,8 +41,10 @@ const HotelsWithRooms: React.FC = () => {
             } else if (selectedFilter === 'mostExpensive') {
                 return await getHotelsWithMostExpensiveRoom(startDate, endDate, pageNumber, pageSize, guestsNumber);
             }
-        } catch (e) {
-            setError('Failed to fetch hotels');
+        } catch (err) {
+            if (err instanceof Error) {
+                setError(err.message);
+            }
         }
 
         return [];
@@ -118,7 +120,7 @@ const HotelsWithRooms: React.FC = () => {
                                     <p>{hr.roomName}</p>
                                     <p>{hr.roomPrice.toString()} UAH</p>
                                 </div>
-                                <Link to={`/hotel-with-rooms?hotel-id=${hr.hotelId}&startDate=${startDate}&endDate=${endDate}&guestsNumber=${guestsNumber}`} className='ms-auto btn btn-primary'>See</Link>
+                                <Link to={`/hotel-with-rooms?hotel-id=${hr.hotelId}&startDate=${startDate}&endDate=${endDate}${guestsNumber != null ? `&guestsNumber=${guestsNumber})` : ''}`} className='ms-auto btn btn-primary'>See</Link>
                             </div>
                         );
                 })}

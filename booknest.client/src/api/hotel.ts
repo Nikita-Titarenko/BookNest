@@ -30,10 +30,10 @@ export interface GetHotelNameResponse {
     hotelName: string,
 };
 
-export const getHotelsWithCheapestRoom = async (startDateTime: string, endDateTime: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
+export const getHotelsWithCheapestRoom = async (startDate: string, endDate: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
     const params = new URLSearchParams({
-        startDateTime: startDateTime,
-        endDateTime: endDateTime,
+        startDate: startDate,
+        endDate: endDate,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
         ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
@@ -51,10 +51,10 @@ export const getHotelsWithCheapestRoom = async (startDateTime: string, endDateTi
     return data;
 };
 
-export const getHotelsWithMostExpensiveRoom = async (startDateTime: string, endDateTime: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
+export const getHotelsWithMostExpensiveRoom = async (startDate: string, endDate: string, pageNumber: number, pageSize: number, guestsNumber: number | null): Promise<HotelWithRoom[]> => {
     const params = new URLSearchParams({
-        startDateTime: startDateTime,
-        endDateTime: endDateTime,
+        startDate: startDate,
+        endDate: endDate,
         pageNumber: pageNumber.toString(),
         pageSize: pageSize.toString(),
         ...(guestsNumber != null && { guestsNumber: guestsNumber.toString() })
@@ -200,5 +200,5 @@ export const deleteHotel = async (hotelId: number): Promise<void> => {
         }
 
         throw new Error(json[0].message);
-    }
+    } 
 };

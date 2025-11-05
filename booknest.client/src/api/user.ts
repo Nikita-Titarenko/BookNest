@@ -23,6 +23,9 @@ export const login = async (email: string, password: string): Promise<LoginRespo
     const json = await response.json();
 
     if (!response.ok) {
+        if (json[0].metadata.Code == '50022') {
+            throw new Error('Email must contain @');
+        }
         if (json[0].metadata.Code == '50030') {
             throw new Error('Email or password incorrect');
         }
@@ -43,6 +46,12 @@ export const register = async (data: RegisterData): Promise<LoginResponse> => {
     const json = await response.json();
 
     if (!response.ok) {
+        if (json[0].metadata.Code == '50021') {
+            throw new Error('Phone number must contain only + and digits');
+        }
+        if (json[0].metadata.Code == '50022') {
+            throw new Error('Email must contain @');
+        }
         if (json[0].metadata.Code == '50012') {
             throw new Error('User with this email and phone already exists');
         }

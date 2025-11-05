@@ -69,7 +69,7 @@ export const getRoomBooking = async (roomId: number): Promise<RoomBookingData> =
 export const getRoomBookingsByUser = async (): Promise<RoomBookingByUserData[]> => {
     const token = localStorage.getItem('jwt-token');
     if (token == null) {
-        throw new Error('You must register to get your rooms');
+        throw new Error('You must register to get your room bookings');
     }
 
     const response = await fetch(`${API_BASE}UserRooms/by-user`, {
@@ -91,7 +91,7 @@ export const getRoomBookingsByUser = async (): Promise<RoomBookingByUserData[]> 
 export const getRoomBookingsByHotel = async (hotelId: number): Promise<RoomBookingByHotelData[]> => {
     const token = localStorage.getItem('jwt-token');
     if (token == null) {
-        throw new Error('You must register to get your rooms');
+        throw new Error('You must register to get your room bookings');
     }
 
     const response = await fetch(`${API_BASE}UserRooms/by-hotel?hotelId=${hotelId}`, {
@@ -135,7 +135,7 @@ export const getAuditRoomBookingsByHotel = async (hotelId: number): Promise<Audi
 export const bookRoom = async (data: BookRoomData): Promise<void> => {
     const token = localStorage.getItem('jwt-token');
     if (token == null) {
-        throw new Error('You must register to create a hotel');
+        throw new Error('You must register to book room');
     }
     const response = await fetch(`${API_BASE}UserRooms`, {
         method: 'POST',
@@ -161,7 +161,7 @@ export const bookRoom = async (data: BookRoomData): Promise<void> => {
 export const updateRoomBooking = async (data: BookRoomData): Promise<void> => {
     const token = localStorage.getItem('jwt-token');
     if (token == null) {
-        throw new Error('You must register to create a hotel');
+        throw new Error('You must register to update room booking');
     }
     const response = await fetch(`${API_BASE}UserRooms/${data.roomId}`, {
         method: 'PUT',
