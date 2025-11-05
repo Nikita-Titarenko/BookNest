@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { deleteRoomBooking, getRoomBookingsByUser, type RoomBookingByUserData } from "../../api/user-room";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { deleteRoomBooking, getRoomBookingsByUser, type RoomBookingByUserData } from '../../api/user-room';
 
 const MyBookings: React.FC = () => {
     const [myBookings, setMyBookings] = useState<RoomBookingByUserData[]>([]);
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const getRoomBookings = async () => {
@@ -33,7 +33,7 @@ const MyBookings: React.FC = () => {
 
     return (
         <>
-            <table className='mb-auto'>
+            <table className="mb-auto">
                 <thead>
                     <tr>
                         <th>
@@ -83,12 +83,12 @@ const MyBookings: React.FC = () => {
                                     </p>
                                 </th>
                                 <th>
-                                    <Link to={`/edit-booking?room-id=${roomBooking.roomId}`} className='btn btn-secondary'>
+                                    <Link to={`/edit-booking?room-id=${roomBooking.roomId}`} className="btn btn-secondary">
                                         Edit
                                     </Link>
                                 </th>
                                 <th>
-                                    <button onClick={() => { deleteRoomBookingHandle(roomBooking.roomId) }} className='btn btn-danger'>
+                                    <button onClick={() => { deleteRoomBookingHandle(roomBooking.roomId) }} className="btn btn-danger">
                                         Delete
                                     </button>
                                 </th>

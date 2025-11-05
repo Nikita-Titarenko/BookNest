@@ -1,15 +1,15 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { getHotel, updateHotel } from "../../api/hotel";
+import { useEffect, useState, type FormEvent } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getHotel, updateHotel } from '../../api/hotel';
 
 const EditHotel: React.FC = () => {
-    const [hotelName, setHotelName] = useState("");
+    const [hotelName, setHotelName] = useState('');
 
-    const [hotelCity, setHotelCity] = useState("");
+    const [hotelCity, setHotelCity] = useState('');
 
-    const [hotelDescription, setHotelDescription] = useState("");
+    const [hotelDescription, setHotelDescription] = useState('');
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -50,23 +50,23 @@ const EditHotel: React.FC = () => {
     }
 
     return (
-        <div className='form-container'>
-            <form onSubmit={handleSubmit} className='my-auto vertical gap-3'>
+        <div className="form-container">
+            <form onSubmit={handleSubmit} className="my-auto vertical gap-3">
                 <input
-                    type='text'
-                    placeholder='Hotel name'
+                    type="text"
+                    placeholder="Hotel name"
                     value={hotelName}
                     onChange={(e) => setHotelName(e.target.value)} />
                 <input
-                    type='text'
-                    placeholder='City'
+                    type="text"
+                    placeholder="City"
                     value={hotelCity}
                     onChange={(e) => setHotelCity(e.target.value)} />
                 <textarea
-                    placeholder='Description'
+                    placeholder="Description"
                     value={hotelDescription}
                     onChange={(e) => setHotelDescription(e.target.value)} />
-                <button type='submit' className='btn btn-primary'>Update hotel</button>
+                <button type="submit" className="btn btn-primary">Update hotel</button>
                 <p>{error}</p>
             </form>
         </div>

@@ -93,11 +93,11 @@ const HotelsWithRooms: React.FC = () => {
     return (
         <div>
             <form className="mb-3">
-                <input type='date' value={startDate} onChange={e => setStartDate(e.target.value)} />
-                <input type='date' value={endDate} onChange={e => setEndDate(e.target.value)} />
+                <input type="date" value={startDate} onChange={e => setStartDate(e.target.value)} />
+                <input type="date" value={endDate} onChange={e => setEndDate(e.target.value)} />
                 <input
-                    type='number'
-                    placeholder='Guests number'
+                    type="number"
+                    placeholder="Guests number"
                     value={guestsNumber == null ? '' : guestsNumber}
                     onChange={e => setGuestsNumber(Number(e.target.value))}
                 />
@@ -108,24 +108,24 @@ const HotelsWithRooms: React.FC = () => {
                 </select>
             </form>
             <p>{error}</p>
-            <div className='gap-3 d-flex flex-wrap'>
+            <div className="gap-3 d-flex flex-wrap">
                 {hotelsWithRoom.map((hr, index) => {
                         return (
-                            <div ref={index === hotelsWithRoom.length - 1 ? lastHotelRef : null} key={hr.hotelId} className='text-left vertical mb-3 card p-2'>
-                                <div className='vertical'>
+                            <div ref={index === hotelsWithRoom.length - 1 ? lastHotelRef : null} key={hr.hotelId} className="text-left vertical mb-3 card p-2">
+                                <div className="vertical">
                                     <p>{hr.hotelName}</p>
                                     <p>{hr.hotelCity}</p>
                                 </div>
-                                <div className='horizontal justify-content-between'>
+                                <div className="horizontal justify-content-between">
                                     <p>{hr.roomName}</p>
                                     <p>{hr.roomPrice.toString()} UAH</p>
                                 </div>
-                                <Link to={`/hotel-with-rooms?hotel-id=${hr.hotelId}&startDate=${startDate}&endDate=${endDate}${guestsNumber != null ? `&guestsNumber=${guestsNumber})` : ''}`} className='ms-auto btn btn-primary'>See</Link>
+                                <Link to={`/hotel-with-rooms?hotel-id=${hr.hotelId}&startDate=${startDate}&endDate=${endDate}${guestsNumber != null ? `&guestsNumber=${guestsNumber})` : ''}`} className="ms-auto btn btn-primary">See</Link>
                             </div>
                         );
                 })}
             </div>
-            {!hasMore && <p className='text-center mt-3'>No more hotels</p>}
+            {!hasMore && <p className="text-center mt-3">No more hotels</p>}
         </div>
     );
 };

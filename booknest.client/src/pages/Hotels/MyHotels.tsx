@@ -1,12 +1,12 @@
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import type { HotelListItem } from "../../api/hotel";
-import { deleteHotel, getHotelsByUser } from "../../api/hotel";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import type { HotelListItem } from '../../api/hotel';
+import { deleteHotel, getHotelsByUser } from '../../api/hotel';
 
 const MyHotels: React.FC = () => {
     const [myHotels, setMyHotels] = useState<HotelListItem[]>([]);
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     useEffect(() => {
         const getHotels = async () => {
@@ -34,10 +34,10 @@ const MyHotels: React.FC = () => {
 
     return (
       <>
-      <div className='horizontal ms-auto'>
-                <Link to='/create-hotel' className='btn btn-primary'>Add hotel</Link>
+      <div className="horizontal ms-auto">
+                <Link to="/create-hotel" className="btn btn-primary">Add hotel</Link>
       </div>
-            <table className='mb-auto'>
+            <table className="mb-auto">
               <thead>
                   <tr>
                       <th>
@@ -77,22 +77,22 @@ const MyHotels: React.FC = () => {
                                   </p>
                               </th>
                               <th>
-                                  <Link to={`/bookings-by-hotel?hotelId=${hotel.hotelId}`} className='btn btn-secondary'>
+                                  <Link to={`/bookings-by-hotel?hotelId=${hotel.hotelId}`} className="btn btn-secondary">
                                       See bookings
                                   </Link>
                               </th>
                               <th>
-                                  <Link to={`/rooms-by-hotel?id=${hotel.hotelId}`} className='btn btn-secondary'>
+                                  <Link to={`/rooms-by-hotel?id=${hotel.hotelId}`} className="btn btn-secondary">
                                       See rooms
                                   </Link>
                               </th>
                               <th>
-                                  <Link to={`/edit-hotel?id=${hotel.hotelId}`} className='btn btn-secondary'>
+                                  <Link to={`/edit-hotel?id=${hotel.hotelId}`} className="btn btn-secondary">
                                       Edit
                                   </Link>
                               </th>
                               <th>
-                                  <button onClick={() => { deleteHotelHandle(hotel.hotelId) }} className='btn btn-danger'>
+                                  <button onClick={() => { deleteHotelHandle(hotel.hotelId) }} className="btn btn-danger">
                                       Delete
                                   </button>
                               </th>

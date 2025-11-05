@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
-import { deleteRoom, getRoomsByHotel, type RoomListItem } from "../../api/room";
-import { getHotelName } from "../../api/hotel";
+import { useEffect, useState } from 'react';
+import { Link, useSearchParams } from 'react-router-dom';
+import { deleteRoom, getRoomsByHotel, type RoomListItem } from '../../api/room';
+import { getHotelName } from '../../api/hotel';
+
 
 const RoomsByHotel: React.FC = () => {
     const [myRooms, setMyRooms] = useState<RoomListItem[]>([]);
 
     const [hotelName, setHotelName] = useState('');
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const [searchParams] = useSearchParams();
 
@@ -54,11 +55,11 @@ const RoomsByHotel: React.FC = () => {
 
     return (
         <>
-            <div className='horizontal ms-auto'>
-                <Link to={`/create-room?id=${hotelId}` } className='btn btn-primary'>Add room</Link>
+            <div className="horizontal ms-auto">
+                <Link to={`/create-room?id=${hotelId}` } className="btn btn-primary">Add room</Link>
             </div>
             <h2>Rooms of the { hotelName } hotel</h2>
-            <table className='mb-auto'>
+            <table className="mb-auto">
                 <thead>
                     <tr>
                         <th>
@@ -108,12 +109,12 @@ const RoomsByHotel: React.FC = () => {
                                     </p>
                                 </th>
                                 <th>
-                                    <Link to={`/edit-room?room-id=${room.roomId}&hotel-id=${hotelId}`} className='btn btn-secondary'>
+                                    <Link to={`/edit-room?room-id=${room.roomId}&hotel-id=${hotelId}`} className="btn btn-secondary">
                                         Edit
                                     </Link>
                                 </th>
                                 <th>
-                                    <button onClick={() => { deleteRoomHandle(room.roomId) }} className='btn btn-danger'>
+                                    <button onClick={() => { deleteRoomHandle(room.roomId) }} className="btn btn-danger">
                                         Delete
                                     </button>
                                 </th>

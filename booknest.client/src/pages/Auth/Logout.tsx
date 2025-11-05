@@ -1,6 +1,6 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../AuthContext";
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../AuthContext';
 
 const Logout: React.FC = () => {
     const navigate = useNavigate();

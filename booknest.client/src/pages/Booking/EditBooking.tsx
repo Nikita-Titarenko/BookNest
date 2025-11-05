@@ -1,13 +1,13 @@
-import { useEffect, useState, type FormEvent } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { getRoomBooking, updateRoomBooking } from "../../api/user-room";
+import { useEffect, useState, type FormEvent } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { getRoomBooking, updateRoomBooking } from '../../api/user-room';
 
 const EditBooking: React.FC = () => {
-    const [startDate, setStartDate] = useState("");
+    const [startDate, setStartDate] = useState('');
 
-    const [endDate, setEndDate] = useState("");
+    const [endDate, setEndDate] = useState('');
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -48,19 +48,19 @@ const EditBooking: React.FC = () => {
     }
 
     return (
-        <div className='form-container'>
-            <form onSubmit={handleSubmit} className='my-auto vertical gap-3'>
+        <div className="form-container">
+            <form onSubmit={handleSubmit} className="my-auto vertical gap-3">
                 <input
-                    type='date'
+                    type="date"
                     value={startDate}
                     onChange={(e) => { setStartDate(e.target.value) }}
                 ></input>
                 <input
-                    type='date'
+                    type="date"
                     value={endDate}
                     onChange={(e) => { setEndDate(e.target.value) }}
                 ></input>
-                <button type='submit' className='btn btn-primary'>Update room booking</button>
+                <button type="submit" className="btn btn-primary">Update room booking</button>
                 <p>{error}</p>
             </form>
         </div>

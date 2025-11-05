@@ -1,4 +1,4 @@
-const API_BASE = "https://localhost:7079/api/";
+const API_BASE = 'https://localhost:7079/api/';
 
 export interface RoomListItem {
     roomId: number,

@@ -1,9 +1,9 @@
-import { useState, type FormEvent } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { createRoom } from "../../api/room";
+import { useState, type FormEvent } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { createRoom } from '../../api/room';
 
 const CreateRoom: React.FC = () => {
-    const [roomName, setRoomName] = useState("");
+    const [roomName, setRoomName] = useState('');
 
     const [roomPrice, setRoomPrice] = useState<number | null>();
 
@@ -13,7 +13,7 @@ const CreateRoom: React.FC = () => {
 
     const [roomSize, setRoomSize] = useState<number | null>();
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -44,35 +44,35 @@ const CreateRoom: React.FC = () => {
     }
 
     return (
-        <div className='form-container'>
-            <form onSubmit={handleSubmit} className='my-auto vertical gap-3'>
+        <div className="form-container">
+            <form onSubmit={handleSubmit} className="my-auto vertical gap-3">
                 <input
-                    type='text'
-                    placeholder='Hotel name'
+                    type="text"
+                    placeholder="Hotel name"
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value)} />
                 <input
-                    type='number'
-                    placeholder='Price (UAH)'
+                    type="number"
+                    placeholder="Price (UAH)"
                     value={roomPrice == null ? '' : roomPrice}
                     onChange={(e) => setRoomPrice(Number(e.target.value))} />
                 <input
-                    type='number'
-                    placeholder='Room quantity'
+                    type="number"
+                    placeholder="Room quantity"
                     value={roomQuantity == null ? '' : roomQuantity}
                     onChange={(e) => setRoomQuantity(Number(e.target.value))} />
                 <input
-                    type='number'
-                    placeholder='Size (m&sup2;)'
-                    step='any'
+                    type="number"
+                    placeholder="Size (m&sup2;)"
+                    step="any"
                     value={roomSize == null ? '' : roomSize}
                     onChange={(e) => setRoomSize(Number(e.target.value))} />
                 <input
-                    type='number'
-                    placeholder='Guests number'
+                    type="number"
+                    placeholder="Guests number"
                     value={guestsNumber == null ? '' : guestsNumber}
                     onChange={(e) => setGuestsNumber(Number(e.target.value))} />
-                <button type='submit' className='btn btn-primary'>Create room</button>
+                <button type="submit" className="btn btn-primary">Create room</button>
                 <p>{error}</p>
             </form>
         </div>

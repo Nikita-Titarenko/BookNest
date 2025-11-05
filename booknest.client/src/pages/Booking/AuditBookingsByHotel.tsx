@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
-import { getAuditRoomBookingsByHotel, type AuditRoomBookingByHotelData } from "../../api/user-room";
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { getAuditRoomBookingsByHotel, type AuditRoomBookingByHotelData } from '../../api/user-room';
 
 const AuditBookingsByHotel: React.FC = () => {
     const [bookings, setBookings] = useState<AuditRoomBookingByHotelData[]>([]);
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const [searchParams] = useSearchParams();
 
@@ -29,7 +29,7 @@ const AuditBookingsByHotel: React.FC = () => {
 
     return (
         <>
-            <table className='mb-auto'>
+            <table className="mb-auto">
                 <thead>
                     <tr>
                         <th>

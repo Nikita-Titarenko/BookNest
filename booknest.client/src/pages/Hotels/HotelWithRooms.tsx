@@ -105,35 +105,35 @@ const HotelWithRooms: React.FC = () => {
         loadRooms();
     }, [startDate, endDate, guestsNumber]);
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     return (
         <div>
             <form>
                 <input
-                    type='date'
+                    type="date"
                     value={startDate}
                     onChange={(e) => { setStartDate(e.target.value) }}
                 ></input>
                 <input
-                    type='date'
+                    type="date"
                     value={endDate}
                     onChange={(e) => { setEndDate(e.target.value) }}
                 ></input>
                 <input
-                    type='number'
-                    placeholder='Guests number'
+                    type="number"
+                    placeholder="Guests number"
                     value={guestsNumber == null ? '' : guestsNumber}
                     onChange={(e) => { setGuestsNumber(Number(e.target.value)) }}
                 ></input>
             </form>
             <p>{error}</p>
-            <div className='text-left vertical mb-3 card'>
+            <div className="text-left vertical mb-3 card">
                 <h2>{hotel?.hotelName}</h2>
                 <p>{hotel?.hotelCity}</p>
                 <p>{hotel?.hotelDescription}</p>
             </div>
-            <table className='mb-auto'>
+            <table className="mb-auto">
                 <thead>
                     <tr>
                         <th>
@@ -183,7 +183,7 @@ const HotelWithRooms: React.FC = () => {
                                     </p>
                                 </th>
                                 <th>
-                                    <button onClick={() => { bookRoomHandle(r.roomId) }} className='btn btn-primary'>
+                                    <button onClick={() => { bookRoomHandle(r.roomId) }} className="btn btn-primary">
                                         Book
                                     </button>
                                 </th>

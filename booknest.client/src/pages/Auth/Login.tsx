@@ -6,11 +6,11 @@ import { useAuth } from '../../AuthContext';
 
 const Login: React.FC = () => {
 
-    const [email, setEmail] = useState("");
+    const [email, setEmail] = useState('');
 
-    const [password, setPassword] = useState("");
+    const [password, setPassword] = useState('');
 
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
 
     const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const Login: React.FC = () => {
             const loginResponse = await apiLogin(email, password);
 
             login(loginResponse.jwtToken);
-            navigate("/");
+            navigate('/');
         }
         catch (err){
             if (err instanceof Error) {
@@ -34,19 +34,19 @@ const Login: React.FC = () => {
         
     };
     return (
-        <div className='form-container'>
-            <form onSubmit={handleSubmit} className='my-auto vertical gap-3 w-25'>
+        <div className="form-container">
+            <form onSubmit={handleSubmit} className="my-auto vertical gap-3 w-25">
                 <input
-                    type='email'
-                    placeholder='email'
+                    type="email"
+                    placeholder="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)} />
                 <input
-                    type='password'
-                    placeholder='password'
+                    type="password"
+                    placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)} />
-                <button type='submit' className='btn btn-primary'>Login</button>
+                <button type="submit" className="btn btn-primary">Login</button>
                 <p>{error}</p>
             </form>
         </div>
