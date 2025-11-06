@@ -11,49 +11,63 @@ namespace BookNest.Infrastructure.Services
     public class UserService : IUserService
     {
         private readonly ApplicationDbContext _context;
+        private readonly IExecuteSafe _executeSafe;
 
-        public UserService(ApplicationDbContext context)
+        public UserService(ApplicationDbContext context, IExecuteSafe executeSafe)
         {
             _context = context;
+            _executeSafe = executeSafe;
         }
 
-        public async Task<Result<int>> Register(RegisterDto dto)
+        public async Task<Result<AppUserDto>> Register(RegisterDto dto)
         {
-            try
+            return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                var userIdParameter = new SqlParameter("@UserId", SqlDbType.Int)
-                {
-                    Direction = ParameterDirection.Output,
-                };
+                var result = await _context.AppUserDtos
+                    .FromSqlRaw(
+                        "EXEC dbo.Register @Fullname, @Email, @Phone, @Password",
+                        new SqlParameter("@Fullname", dto.Fullname),
+                        new SqlParameter("@Email", dto.Email),
+                        new SqlParameter("@Phone", dto.Phone),
+                        new SqlParameter("@Password", dto.Password)
+                    )
+                    .ToListAsync();
 
-                await _context.Database.ExecuteSqlRawAsync(
-                    "EXEC dbo.Register @Fullname, @Email, @Phone, @Password, @UserId OUTPUT",
-                    new SqlParameter("@Fullname", dto.Fullname),
-                    new SqlParameter("@Email", dto.Email),
-                    new SqlParameter("@Phone", dto.Phone),
-                    new SqlParameter("@Password", dto.Password),
-                    userIdParameter
-                );
-
-                return Result.Ok((int)userIdParameter.Value);
-            }
-            catch (SqlException ex)
-            {
-                return Result.Fail(new Error(ex.Message).WithMetadata("Code", ex.Number));
-            }
+                return Result.Ok(result.First());
+            });
         }
 
         public async Task<Result<int>> Login(LoginDto dto)
         {
-            int? loginResult = await _context.AppUsers
-                .Select(u => _context.Login(dto.Email, dto.Password))
-                .FirstOrDefaultAsync();
-            if (loginResult == null)
+            return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                return Result.Fail(new Error("Email or password incorrect").WithMetadata("Code", "50030"));
-            }
+                int? loginResult = await _context.AppUsers
+                    .Select(u => _context.Login(dto.Email, dto.Password))
+                    .FirstOrDefaultAsync();
+                if (loginResult == null)
+                {
+                    return Result.Fail(new Error("Email or password incorrect").WithMetadata("Code", "50030"));
+                }
 
-            return Result.Ok(loginResult.Value);
+                return Result.Ok(loginResult.Value);
+            });
+        }
+
+        public async Task<Result<AppUserDto>> GetAppUserAsync(int userId)
+        {
+            return await _executeSafe.ExecuteSafeAsync(async () =>
+            {
+                var dto = await _context
+                    .GetAppUser(userId)
+                    .FirstOrDefaultAsync();
+
+                if (dto == null)
+                {
+                    return Result.Fail(new Error("User not found").WithMetadata("Code", 50004));
+                }
+
+                return Result.Ok(dto);
+            });
         }
     }
 }

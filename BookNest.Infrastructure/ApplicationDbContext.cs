@@ -22,6 +22,8 @@ public partial class ApplicationDbContext : DbContext
 
     public DbSet<CreateRoomResultDto> CreateRoomResults { get; set; }
 
+    public DbSet<AppUserDto> AppUserDtos { get; set; }
+
     public int? Login(string email, string password)
     {
         throw new NotImplementedException();
@@ -31,6 +33,9 @@ public partial class ApplicationDbContext : DbContext
     {
         throw new NotImplementedException();
     }
+
+    public IQueryable<AppUserDto> GetAppUser(int userId)
+        => FromExpression(() => GetAppUser(userId));
 
     public IQueryable<HotelListItemDto> GetHotelsByUser(int userId)
         => FromExpression(() => GetHotelsByUser(userId));
@@ -164,6 +169,11 @@ public partial class ApplicationDbContext : DbContext
             .HasSchema("dbo");
 
         modelBuilder
+            .HasDbFunction(() => GetAppUser(default!))
+            .HasName("GetAppUser")
+            .HasSchema("dbo");
+
+        modelBuilder
             .HasDbFunction(() => GetRoomBooking(default!, default!))
             .HasName("GetRoomBooking")
             .HasSchema("dbo");
@@ -245,6 +255,15 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.HotelCity).HasColumnName("hotel_city");
             entity.Property(e => e.HotelDescription).HasColumnName("hotel_description");
             entity.Property(e => e.AppUserId).HasColumnName("app_user_id");
+        });
+
+        modelBuilder.Entity<AppUserDto>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.AppUserId).HasColumnName("app_user_id");
+            entity.Property(e => e.AppUserEmail).HasColumnName("app_user_email");
+            entity.Property(e => e.AppUserFullname).HasColumnName("app_user_fullname");
+            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
         });
 
         OnModelCreatingPartial(modelBuilder);

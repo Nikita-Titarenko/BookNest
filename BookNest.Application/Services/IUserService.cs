@@ -5,7 +5,8 @@ namespace BookNest.Application.Services
 {
     public interface IUserService
     {
+        Task<Result<AppUserDto>> GetAppUserAsync(int userId);
         Task<Result<int>> Login(LoginDto dto);
-        Task<Result<int>> Register(RegisterDto dto);
+        Task<Result<AppUserDto>> Register(RegisterDto dto);
     }
 }

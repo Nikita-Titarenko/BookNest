@@ -1,4 +1,5 @@
-﻿using BookNest.Application.Dtos;
+﻿using System.Security.Claims;
+using BookNest.Application.Dtos;
 using BookNest.Application.Services;
 using BookNest.Server.Responses;
 using Microsoft.AspNetCore.Mvc;
@@ -20,17 +21,38 @@ namespace BookNest.Server.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterDto dto)
         {
-            var registerResult = await _userService.Register(dto);
+            var result = await _userService.Register(dto);
 
-            if (!registerResult.IsSuccess)
+            if (!result.IsSuccess)
             {
-                return Conflict(registerResult.Errors);
+                return Conflict(result.Errors);
             }
 
-            return Ok(new AuthResultResponseModel
+            var appUserDto = result.Value;
+
+            return CreatedAtAction(
+                nameof(GetAppUser),
+                new { userId = appUserDto.AppUserId },
+                new
+                {
+                    appUser = appUserDto,
+                    jwtToken = _jwtTokenService.GenerateToken(appUserDto.AppUserId)
+                }
+            );
+        }
+
+        [HttpGet("{userId}")]
+        public async Task<IActionResult> GetAppUser(int userId)
+        {
+            var result = await _userService.GetAppUserAsync(userId);
+
+            if (!result.IsSuccess)
             {
-                JwtToken = _jwtTokenService.GenerateToken(registerResult.Value)
-            });
+                return NotFound(result.Errors);
+            }
+
+            var appUserDto = result.Value;
+            return Ok(appUserDto);
         }
 
         [HttpPost("login")]
