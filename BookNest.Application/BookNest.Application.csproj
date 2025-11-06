@@ -10,8 +10,4 @@
     <PackageReference Include="FluentResults" Version="4.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\BookNest.Domain\BookNest.Domain.csproj" />
-  </ItemGroup>
-
 </Project>

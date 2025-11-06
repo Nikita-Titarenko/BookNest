@@ -22,7 +22,7 @@ namespace BookNest.Infrastructure.Services
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                var hotelName = await _context.Hotels
+                var hotelName = await _context.AppUsers
                     .Select(h => _context.GetHotelName(hotelId))
                     .FirstOrDefaultAsync();
                 if (hotelName == null)
