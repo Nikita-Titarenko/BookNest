@@ -16,6 +16,12 @@ public partial class ApplicationDbContext : DbContext
 
     public DbSet<AppUser> AppUsers { get; set; }
 
+    public DbSet<CreateAppUserRoomResultDto> CreateAppUserRooms { get; set; }
+
+    public DbSet<CreateHotelResultDto> CreateHotelResults { get; set; }
+
+    public DbSet<CreateRoomResultDto> CreateRoomResults { get; set; }
+
     public int? Login(string email, string password)
     {
         throw new NotImplementedException();
@@ -58,6 +64,15 @@ public partial class ApplicationDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<CreateAppUserRoomResultDto>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.UserId).HasColumnName("app_user_id");
+            entity.Property(e => e.RoomId).HasColumnName("room_id");
+            entity.Property(e => e.StartDate).HasColumnName("start_date");
+            entity.Property(e => e.EndDate).HasColumnName("end_date");
+        });
+
         modelBuilder.Entity<HotelDto>(entity =>
         {
             entity.HasNoKey();
@@ -208,6 +223,28 @@ public partial class ApplicationDbContext : DbContext
             entity.HasKey(e => e.Id).HasName("PK__AppUser__06D526143E40DD46");
 
             entity.ToTable("AppUser");
+        });
+
+        modelBuilder.Entity<CreateRoomResultDto>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.RoomId).HasColumnName("room_id");
+            entity.Property(e => e.RoomName).HasColumnName("room_name");
+            entity.Property(e => e.RoomPrice).HasColumnName("room_price");
+            entity.Property(e => e.RoomSize).HasColumnName("room_size");
+            entity.Property(e => e.RoomQuantity).HasColumnName("room_quantity");
+            entity.Property(e => e.GuestsNumber).HasColumnName("guests_number");
+            entity.Property(e => e.HotelId).HasColumnName("hotel_id");
+        });
+
+        modelBuilder.Entity<CreateHotelResultDto>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.HotelId).HasColumnName("hotel_id");
+            entity.Property(e => e.HotelName).HasColumnName("hotel_name");
+            entity.Property(e => e.HotelCity).HasColumnName("hotel_city");
+            entity.Property(e => e.HotelDescription).HasColumnName("hotel_description");
+            entity.Property(e => e.AppUserId).HasColumnName("app_user_id");
         });
 
         OnModelCreatingPartial(modelBuilder);

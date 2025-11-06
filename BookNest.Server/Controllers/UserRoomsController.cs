@@ -89,7 +89,12 @@ namespace BookNest.Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok();
+            var appUserRoom = result.Value;
+            return CreatedAtAction(
+                nameof(GetRoomBookings),
+                new { id = appUserRoom.RoomId },
+                appUserRoom
+            );
         }
 
         [HttpPut("{id}")]

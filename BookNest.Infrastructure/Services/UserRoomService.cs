@@ -77,18 +77,19 @@ namespace BookNest.Infrastructure.Services
             });
         }
 
-        public async Task<Result> BookRoomAsync(int appUserId, BookingDto dto)
+        public async Task<Result<CreateAppUserRoomResultDto>> BookRoomAsync(int appUserId, BookingDto dto)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                await _context.Database
-                    .ExecuteSqlRawAsync("EXEC dbo.BookRoom @AppUserId, @RoomId, @StartDateTime, @EndDateTime",
+                var result = await _context.CreateAppUserRooms
+                    .FromSqlRaw("EXEC dbo.BookRoom @AppUserId, @RoomId, @StartDateTime, @EndDateTime",
                     new SqlParameter("@AppUserId", appUserId),
                     new SqlParameter("@RoomId", dto.RoomId),
                     new SqlParameter("@StartDateTime", dto.StartDate),
-                    new SqlParameter("@EndDateTime", dto.EndDate));
+                    new SqlParameter("@EndDateTime", dto.EndDate))
+                    .ToListAsync();
 
-                return Result.Ok();
+                return Result.Ok(result.First());
             });
         }
 

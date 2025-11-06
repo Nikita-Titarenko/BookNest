@@ -17,27 +17,23 @@ namespace BookNest.Infrastructure.Services
             _executeSafe = executeSafe;
         }
 
-        public async Task<Result<int>> CreateRoomAsync(CreateRoomDto dto, int appUserId)
+        public async Task<Result<CreateRoomResultDto>> CreateRoomAsync(CreateRoomDto dto, int appUserId)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                var roomIdParameter = new SqlParameter("@RoomId", SqlDbType.Int)
-                {
-                    Direction = ParameterDirection.Output,
-                };
-
-                await _context.Database
-                    .ExecuteSqlRawAsync("EXEC dbo.CreateRoom @RoomName, @RoomPrice, @RoomQuantity, @GuestsNumber, @RoomSize, @HotelId, @AppUserId, @RoomId OUTPUT",
+                var result = await _context.CreateRoomResults
+                    .FromSqlRaw("EXEC dbo.CreateRoom @RoomName, @RoomPrice, @RoomQuantity, @GuestsNumber, @RoomSize, @HotelId, @AppUserId",
                         new SqlParameter("@RoomName", dto.RoomName),
                         new SqlParameter("@RoomPrice", dto.RoomPrice),
                         new SqlParameter("@RoomQuantity", dto.RoomQuantity),
                         new SqlParameter("@GuestsNumber", dto.GuestsNumber),
                         new SqlParameter("@RoomSize", dto.RoomSize),
                         new SqlParameter("@HotelId", dto.HotelId),
-                        new SqlParameter("@AppUserId", appUserId),
-                        roomIdParameter);
+                        new SqlParameter("@AppUserId", appUserId)
+                    )
+                    .ToListAsync();
 
-                return Result.Ok((int)roomIdParameter.Value);
+                return Result.Ok(result.First());
             });
         }
 

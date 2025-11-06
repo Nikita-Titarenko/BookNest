@@ -87,11 +87,11 @@ namespace BookNest.Server.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateHotel(HotelDto hotelDto)
+        public async Task<IActionResult> CreateHotel(HotelDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
-            var result = await _hotelService.CreateHotelAsync(Convert.ToInt32(userId), hotelDto);
+            var result = await _hotelService.CreateHotelAsync(Convert.ToInt32(userId), dto);
             if (!result.IsSuccess)
             {
                 if (result.Errors.Any(e => e.Metadata.ContainsValue("50004")))
@@ -102,10 +102,12 @@ namespace BookNest.Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok(new CreateHotelResponseModel
-            {
-                HotelId = result.Value
-            });
+            var hotelDto = result.Value;
+            return CreatedAtAction(
+                nameof(GetHotel), 
+                new { id = result.Value.HotelId },
+                hotelDto
+            );
         }
 
         [HttpPut("{id}")]

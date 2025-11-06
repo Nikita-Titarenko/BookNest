@@ -5,7 +5,7 @@ namespace BookNest.Application.Services
 {
     public interface IHotelService
     {
-        Task<Result<int>> CreateHotelAsync(int appUserId, HotelDto hotelDto);
+        Task<Result<CreateHotelResultDto>> CreateHotelAsync(int appUserId, HotelDto hotelDto);
         Task<Result> DeleteHotelAsync(int hotelId, int appUserId);
         Task<Result<HotelDto>> GetHotelAsync(int hotelId);
         Task<Result<string>> GetHotelNameAsync(int hotelId);

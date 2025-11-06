@@ -1,9 +1,7 @@
 ﻿using System.Security.Claims;
 using BookNest.Application.Dtos;
 using BookNest.Application.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookNest.Server.Controllers
@@ -14,7 +12,8 @@ namespace BookNest.Server.Controllers
     {
         private readonly IRoomService _roomService;
 
-        public RoomsController(IRoomService roomService) {
+        public RoomsController(IRoomService roomService)
+        {
             _roomService = roomService;
         }
 
@@ -30,7 +29,13 @@ namespace BookNest.Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok(result.Value);
+            var room = result.Value;
+
+            return CreatedAtAction(
+                nameof(GetRoom),
+                new { id = room.RoomId },
+                room
+            );
         }
 
         [HttpPut("{id}")]

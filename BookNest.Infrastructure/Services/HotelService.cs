@@ -98,24 +98,20 @@ namespace BookNest.Infrastructure.Services
             return Result.Ok(hotels);
         }
 
-        public async Task<Result<int>> CreateHotelAsync(int appUserId, HotelDto hotelDto)
+        public async Task<Result<CreateHotelResultDto>> CreateHotelAsync(int appUserId, HotelDto hotelDto)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                var hotelIdParameter = new SqlParameter("@HotelId", SqlDbType.Int)
-                {
-                    Direction = ParameterDirection.Output,
-                };
-
-                await _context.Database
-                    .ExecuteSqlRawAsync("EXEC dbo.CreateHotel @AppUserId, @HotelName, @HotelDescription, @HotelCity, @HotelId OUTPUT",
+                var result = await _context.CreateHotelResults
+                    .FromSqlRaw("EXEC dbo.CreateHotel @AppUserId, @HotelName, @HotelDescription, @HotelCity",
                         new SqlParameter("@AppUserId", appUserId),
                         new SqlParameter("@HotelName", hotelDto.HotelName),
                         new SqlParameter("@HotelDescription", hotelDto.HotelDescription),
-                        new SqlParameter("@HotelCity", hotelDto.HotelCity),
-                        hotelIdParameter);
+                        new SqlParameter("@HotelCity", hotelDto.HotelCity)
+                    )
+                    .ToListAsync();
 
-                return Result.Ok((int)hotelIdParameter.Value);
+                return Result.Ok(result.First());
             });
         }
 
