@@ -122,7 +122,7 @@ namespace BookNest.Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -137,7 +137,7 @@ namespace BookNest.Server.Controllers
                 return BadRequest(result.Errors);
             }
 
-            return Ok();
+            return NoContent();
         }
     }
 }
