@@ -17,7 +17,7 @@ namespace BookNest.Infrastructure.Services
             _executeSafe = executeSafe;
         }
 
-        public async Task<Result<RoomBookingDto>> GetRoomBookingsAsync(int appUserId, int roomId)
+        public async Task<Result<RoomBookingDto>> GetRoomBookingAsync(int appUserId, int roomId)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {

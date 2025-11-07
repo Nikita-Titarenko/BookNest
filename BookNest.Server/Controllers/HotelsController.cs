@@ -21,7 +21,7 @@ namespace BookNest.Server.Controllers
 
         [HttpGet("by-user")]
         [Authorize]
-        public async Task<IActionResult> GetHotelsByUser()
+        public async Task<IActionResult> GetHotelsByUserAsync()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -35,7 +35,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("{id}/name")]
-        public async Task<IActionResult> GetHotelName(int id)
+        public async Task<IActionResult> GetHotelNameAsync(int id)
         {
             var result = await _hotelService.GetHotelNameAsync(id);
             if (!result.IsSuccess)
@@ -50,7 +50,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetHotel(int id)
+        public async Task<IActionResult> GetHotelAsync(int id)
         {
             var result = await _hotelService.GetHotelAsync(id);
             if (!result.IsSuccess)
@@ -62,7 +62,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("with-cheapest-rooms")]
-        public async Task<IActionResult> GetHotelsWithCheapestRoom(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
+        public async Task<IActionResult> GetHotelsWithCheapestRoomAsync(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
         {
             var result = await _hotelService.GetHotelsWithCheapestRoomsAsync(startDate, endDate, pageNumber, pageSize, guestsNumber);
             if (!result.IsSuccess)
@@ -74,7 +74,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("with-most-expensive-rooms")]
-        public async Task<IActionResult> GetHotelsWithMostExpensiveRoom(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
+        public async Task<IActionResult> GetHotelsWithMostExpensiveRoomAsync(DateTime startDate, DateTime endDate, int pageNumber, int pageSize, int? guestsNumber = null!)
         {
             var result = await _hotelService.GetHotelsWithMostExpensiveRoomsAsync(startDate, endDate, pageNumber, pageSize, guestsNumber);
             if (!result.IsSuccess)
@@ -87,7 +87,7 @@ namespace BookNest.Server.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateHotel(HotelDto dto)
+        public async Task<IActionResult> CreateHotelAsync(HotelDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -104,7 +104,7 @@ namespace BookNest.Server.Controllers
 
             var hotelDto = result.Value;
             return CreatedAtAction(
-                nameof(GetHotel), 
+                nameof(GetHotelAsync), 
                 new { id = result.Value.HotelId },
                 hotelDto
             );
@@ -112,7 +112,7 @@ namespace BookNest.Server.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> EditHotel(int id, HotelDto hotelDto)
+        public async Task<IActionResult> EditHotelAsync(int id, HotelDto hotelDto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -127,7 +127,7 @@ namespace BookNest.Server.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteHotel(int id)
+        public async Task<IActionResult> DeleteHotelAsync(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 

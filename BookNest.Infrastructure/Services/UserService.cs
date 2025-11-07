@@ -19,7 +19,7 @@ namespace BookNest.Infrastructure.Services
             _executeSafe = executeSafe;
         }
 
-        public async Task<Result<AppUserDto>> Register(RegisterDto dto)
+        public async Task<Result<AppUserDto>> RegisterAsync(RegisterDto dto)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
@@ -37,7 +37,7 @@ namespace BookNest.Infrastructure.Services
             });
         }
 
-        public async Task<Result<int>> Login(LoginDto dto)
+        public async Task<Result<int>> LoginAsync(LoginDto dto)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
@@ -53,7 +53,7 @@ namespace BookNest.Infrastructure.Services
             });
         }
 
-        public async Task<Result<AppUserDto>> GetAppUserAsync(int userId)
+        public async Task<Result<AppUserDto>> GetAppUserAsyncAsync(int userId)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {

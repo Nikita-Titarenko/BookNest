@@ -19,7 +19,7 @@ namespace BookNest.Server.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateRoom(CreateRoomDto dto)
+        public async Task<IActionResult> CreateRoomAsync(CreateRoomDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -32,7 +32,7 @@ namespace BookNest.Server.Controllers
             var room = result.Value;
 
             return CreatedAtAction(
-                nameof(GetRoom),
+                nameof(GetRoomAsync),
                 new { id = room.RoomId },
                 room
             );
@@ -40,7 +40,7 @@ namespace BookNest.Server.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateRoom(int id, RoomDto dto)
+        public async Task<IActionResult> UpdateRoomAsync(int id, RoomDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -55,7 +55,7 @@ namespace BookNest.Server.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteHotel(int id)
+        public async Task<IActionResult> DeleteHotelAsync(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -69,7 +69,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("by-hotel")]
-        public async Task<IActionResult> GetRoomsByHotel(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!, int? guestsNumber = null!)
+        public async Task<IActionResult> GetRoomsByHotelAsync(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!, int? guestsNumber = null!)
         {
             var result = await _roomService.GetRoomsByHotelAsync(hotelId, startDateTime, endDateTime, guestsNumber);
             if (!result.IsSuccess)
@@ -81,7 +81,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoom(int id)
+        public async Task<IActionResult> GetRoomAsync(int id)
         {
             var result = await _roomService.GetRoomAsync(id);
             if (!result.IsSuccess)

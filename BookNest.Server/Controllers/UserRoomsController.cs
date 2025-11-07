@@ -23,10 +23,10 @@ namespace BookNest.Server.Controllers
 
         [HttpGet("{id}")]
         [Authorize]
-        public async Task<IActionResult> GetRoomBookings(int id)
+        public async Task<IActionResult> GetRoomBookingAsync(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            var result = await _userRoomService.GetRoomBookingsAsync(Convert.ToInt32(userId), id);
+            var result = await _userRoomService.GetRoomBookingAsync(Convert.ToInt32(userId), id);
             if (!result.IsSuccess)
             {
                 return BadRequest(result.Errors);
@@ -37,7 +37,7 @@ namespace BookNest.Server.Controllers
 
         [HttpGet("by-user")]
         [Authorize]
-        public async Task<IActionResult> GetRoomBookingsByUser()
+        public async Task<IActionResult> GetRoomBookingsByUserAsync()
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var result = await _userRoomService.GetRoomBookingsByUserAsync(Convert.ToInt32(userId));
@@ -51,7 +51,7 @@ namespace BookNest.Server.Controllers
 
         [HttpGet("by-hotel")]
         [Authorize]
-        public async Task<IActionResult> GetRoomBookingsByHotel(int hotelId)
+        public async Task<IActionResult> GetRoomBookingsByHotelAsync(int hotelId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var result = await _userRoomService.GetRoomBookingsByHotelAsync(Convert.ToInt32(userId), hotelId);
@@ -65,7 +65,7 @@ namespace BookNest.Server.Controllers
 
         [HttpGet("audit-by-hotel")]
         [Authorize]
-        public async Task<IActionResult> GetAuditRoomBookingsByHotel(int hotelId)
+        public async Task<IActionResult> GetAuditRoomBookingsByHotelAsync(int hotelId)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var result = await _userRoomService.GetAuditRoomBookingsByHotelAsync(Convert.ToInt32(userId), hotelId);
@@ -79,7 +79,7 @@ namespace BookNest.Server.Controllers
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> BookRoom(BookingDto dto)
+        public async Task<IActionResult> BookRoomAsync(BookingDto dto)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 
@@ -91,7 +91,7 @@ namespace BookNest.Server.Controllers
 
             var appUserRoom = result.Value;
             return CreatedAtAction(
-                nameof(GetRoomBookings),
+                nameof(GetRoomBookingAsync),
                 new { id = appUserRoom.RoomId },
                 appUserRoom
             );
@@ -99,7 +99,7 @@ namespace BookNest.Server.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateRoomBooking(int id, BookingDto dto)
+        public async Task<IActionResult> UpdateRoomBookingAsync(int id, BookingDto dto)
         {
             if (id != dto.RoomId)
             {
@@ -118,7 +118,7 @@ namespace BookNest.Server.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteRoomBooking(int id)
+        public async Task<IActionResult> DeleteRoomBookingAsync(int id)
         {
             string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
 

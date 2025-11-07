@@ -19,9 +19,9 @@ namespace BookNest.Server.Controllers
             _jwtTokenService = jwtTokenService;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto)
+        public async Task<IActionResult> RegisterAsync(RegisterDto dto)
         {
-            var result = await _userService.Register(dto);
+            var result = await _userService.RegisterAsync(dto);
 
             if (!result.IsSuccess)
             {
@@ -31,7 +31,7 @@ namespace BookNest.Server.Controllers
             var appUserDto = result.Value;
 
             return CreatedAtAction(
-                nameof(GetAppUser),
+                nameof(GetAppUserAsync),
                 new { userId = appUserDto.AppUserId },
                 new
                 {
@@ -42,9 +42,9 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAppUser(int userId)
+        public async Task<IActionResult> GetAppUserAsync(int userId)
         {
-            var result = await _userService.GetAppUserAsync(userId);
+            var result = await _userService.GetAppUserAsyncAsync(userId);
 
             if (!result.IsSuccess)
             {
@@ -56,9 +56,9 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginDto dto)
+        public async Task<IActionResult> LoginAsync(LoginDto dto)
         {
-            var loginResult = await _userService.Login(dto);
+            var loginResult = await _userService.LoginAsync(dto);
 
             if (!loginResult.IsSuccess)
             {
