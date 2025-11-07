@@ -56,7 +56,7 @@ namespace BookNest.Infrastructure.Services
             });
         }
 
-        public async Task<Result<int>> DeleteRoomAsync(int roomId, int appUserId)
+        public async Task<Result> DeleteRoomAsync(int roomId, int appUserId)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {

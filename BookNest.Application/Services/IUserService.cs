@@ -7,6 +7,6 @@ namespace BookNest.Application.Services
     {
         Task<Result<AppUserDto>> GetAppUserAsyncAsync(int userId);
         Task<Result<int>> LoginAsync(LoginDto dto);
-        Task<Result<AppUserDto>> RegisterAsync(RegisterDto dto);
+        Task<Result<CreateAppUserResultDto>> RegisterAsync(RegisterDto dto);
     }
 }

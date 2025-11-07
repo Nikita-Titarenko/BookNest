@@ -19,11 +19,11 @@ namespace BookNest.Infrastructure.Services
             _executeSafe = executeSafe;
         }
 
-        public async Task<Result<AppUserDto>> RegisterAsync(RegisterDto dto)
+        public async Task<Result<CreateAppUserResultDto>> RegisterAsync(RegisterDto dto)
         {
             return await _executeSafe.ExecuteSafeAsync(async () =>
             {
-                var result = await _context.AppUserDtos
+                var result = await _context.CreateAppUserResults
                     .FromSqlRaw(
                         "EXEC dbo.Register @Fullname, @Email, @Phone, @Password",
                         new SqlParameter("@Fullname", dto.Fullname),
@@ -46,7 +46,7 @@ namespace BookNest.Infrastructure.Services
                     .FirstOrDefaultAsync();
                 if (loginResult == null)
                 {
-                    return Result.Fail(new Error("Email or password incorrect").WithMetadata("Code", "50030"));
+                    return Result.Fail(new Error("Email or password incorrect").WithMetadata("Code", 50030));
                 }
 
                 return Result.Ok(loginResult.Value);

@@ -1,37 +1,46 @@
-﻿using System.Security.Claims;
+﻿using AutoMapper;
 using BookNest.Application.Dtos.AppUsers;
 using BookNest.Application.Services;
+using BookNest.Server.Requests.AppUsers;
 using BookNest.Server.Responses;
+using FluentResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookNest.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UsersController : ControllerBase
+    public class UsersController : BaseController
     {
         private readonly IUserService _userService;
         private readonly IJwtTokenService _jwtTokenService;
+        private readonly IMapper _mapper;
 
-        public UsersController(IUserService userService, IJwtTokenService jwtTokenService)
+        public UsersController(IUserService userService, IJwtTokenService jwtTokenService, IMapper mapper)
         {
             _userService = userService;
             _jwtTokenService = jwtTokenService;
+            _mapper = mapper;
         }
         [HttpPost("register")]
-        public async Task<IActionResult> RegisterAsync(RegisterDto dto)
+        public async Task<IActionResult> Register(RegisterRequestModel request)
         {
-            var result = await _userService.RegisterAsync(dto);
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var result = await _userService.RegisterAsync(_mapper.Map<RegisterDto>(request));
 
             if (!result.IsSuccess)
             {
-                return Conflict(result.Errors);
+                return Conflict(MapErrors(result.Errors));
             }
 
-            var appUserDto = result.Value;
+            CreateAppUserResultDto appUserDto = result.Value;
 
             return CreatedAtAction(
-                nameof(GetAppUserAsync),
+                nameof(GetAppUser),
                 new { userId = appUserDto.AppUserId },
                 new
                 {
@@ -42,7 +51,7 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> GetAppUserAsync(int userId)
+        public async Task<IActionResult> GetAppUser(int userId)
         {
             var result = await _userService.GetAppUserAsyncAsync(userId);
 
@@ -56,18 +65,23 @@ namespace BookNest.Server.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> LoginAsync(LoginDto dto)
+        public async Task<IActionResult> Login(LoginRequestModel request)
         {
-            var loginResult = await _userService.LoginAsync(dto);
-
-            if (!loginResult.IsSuccess)
+            if (!ModelState.IsValid)
             {
-                return Conflict(loginResult.Errors);
+                return BadRequest();
+            }
+
+            var result = await _userService.LoginAsync(_mapper.Map<LoginDto>(request));
+
+            if (!result.IsSuccess)
+            {
+                return Conflict(MapErrors(result.Errors));
             }
 
             return Ok(new AuthResultResponseModel
             {
-                JwtToken = _jwtTokenService.GenerateToken(loginResult.Value)
+                JwtToken = _jwtTokenService.GenerateToken(result.Value)
             });
         }
     }

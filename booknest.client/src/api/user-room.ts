@@ -1,3 +1,6 @@
+import { ValidationError } from "../errors/validation-error";
+import { getResponseErrors, type BadRequest } from "./response-map";
+
 const API_BASE = 'https://localhost:7079/api/';
 
 export interface BookRoomData {
@@ -60,7 +63,7 @@ export const getRoomBooking = async (roomId: number): Promise<RoomBookingData> =
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -82,7 +85,7 @@ export const getRoomBookingsByUser = async (): Promise<RoomBookingByUserData[]> 
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -104,7 +107,7 @@ export const getRoomBookingsByHotel = async (hotelId: number): Promise<RoomBooki
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -126,7 +129,7 @@ export const getAuditRoomBookingsByHotel = async (hotelId: number): Promise<Audi
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -148,13 +151,7 @@ export const bookRoom = async (data: BookRoomData): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code === 50015) {
-            throw new Error('All rooms already booked on this date');
-        }
-        if (json[0].metadata.Code === 50016) {
-            throw new Error('Booking already exists');
-        }
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
 };
 
@@ -174,10 +171,7 @@ export const updateRoomBooking = async (data: BookRoomData): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code === 50015) {
-            throw new Error('All rooms already booked on this date');
-        }
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
 };
 
@@ -196,6 +190,6 @@ export const deleteRoomBooking = async (roomId: number): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
 };

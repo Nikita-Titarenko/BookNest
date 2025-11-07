@@ -3,6 +3,12 @@ import { useState } from 'react';
 import { login as apiLogin } from '../../api/user';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../AuthContext';
+import { ValidationError } from '../../errors/validation-error';
+
+interface FormErrors {
+    email?: string;
+    password?: string;
+}
 
 const Login: React.FC = () => {
 
@@ -10,7 +16,9 @@ const Login: React.FC = () => {
 
     const [password, setPassword] = useState('');
 
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState<FormErrors>({});
+
+    const [generalError, setGeneralError] = useState('');
 
     const navigate = useNavigate();
 
@@ -26,8 +34,16 @@ const Login: React.FC = () => {
             navigate('/');
         }
         catch (err){
-            if (err instanceof Error) {
-                setError(err.message);
+            if (err instanceof ValidationError) {
+                const fieldErrors: FormErrors = {};
+                err.errors.forEach(e => {
+                    if (e.field) {
+                        fieldErrors[e.field as keyof FormErrors] = e.message;
+                    } else {
+                        setGeneralError(e.message);
+                    }
+                });
+                setErrors(fieldErrors);
             }
         }
 
@@ -41,13 +57,15 @@ const Login: React.FC = () => {
                     placeholder="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)} />
+                {errors.email && <p className="error">{errors.email}</p>}
                 <input
                     type="password"
                     placeholder="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)} />
+                {errors.password && <p className="error">{errors.password}</p>}
                 <button type="submit" className="btn btn-primary">Login</button>
-                <p>{error}</p>
+                <p>{generalError}</p>
             </form>
         </div>
   );

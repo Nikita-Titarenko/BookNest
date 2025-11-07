@@ -75,11 +75,6 @@ namespace BookNest.Infrastructure.Services
                     .GetHotelsWithCheapestRoom(startDate, endDate, pageNumber, pageSize, guestsNumber)
                     .ToListAsync();
 
-                if (hotels == null)
-                {
-                    return Result.Fail(new Error(""));
-                }
-
                 return Result.Ok(hotels);
             });
         }
@@ -89,11 +84,6 @@ namespace BookNest.Infrastructure.Services
             IEnumerable<HotelWithRoomListItemDto> hotels = await _context
                 .GetHotelsWithMostExpensiveRoom(startDate, endDate, pageNumber, pageSize, guestsNumber)
                 .ToListAsync();
-
-            if (hotels == null)
-            {
-                return Result.Fail(new Error(""));
-            }
 
             return Result.Ok(hotels);
         }

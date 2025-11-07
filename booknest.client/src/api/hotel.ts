@@ -1,3 +1,6 @@
+import { ValidationError } from "../errors/validation-error";
+import { getResponseErrors, type BadRequest } from "./response-map";
+
 const API_BASE = 'https://localhost:7079/api/';
 
 export interface HotelWithRoom {
@@ -45,7 +48,7 @@ export const getHotelsWithCheapestRoom = async (startDate: string, endDate: stri
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -66,7 +69,7 @@ export const getHotelsWithMostExpensiveRoom = async (startDate: string, endDate:
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -80,7 +83,7 @@ export const getHotel = async (hotelId: number): Promise<HotelData> => {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -94,7 +97,7 @@ export const getHotelName = async (hotelId: number): Promise<GetHotelNameRespons
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -116,7 +119,7 @@ export const getHotelsByUser = async (): Promise<HotelListItem[]> => {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -138,16 +141,7 @@ export const createHotel = async (data: HotelData): Promise<CreateHotelResponse>
     const json = await response.json();
 
     if (!response.ok) {
-        if (json[0].metadata.Code === 50002) {
-            throw new Error('Hotel name can not be empty');
-        }
-        if (json[0].metadata.Code === 50003) {
-            throw new Error('Hotel city can not be empty');
-        }
-        if (json[0].metadata.Code === 50004) {
-            throw new Error('You must register to create a hotel');
-        }
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
     return json;
 };
@@ -168,16 +162,7 @@ export const updateHotel = async (hotelId: number, data: HotelData): Promise<voi
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code === 50002) {
-            throw new Error('Hotel name can not be empty');
-        }
-        if (json[0].metadata.Code === 50003) {
-            throw new Error('Hotel city can not be empty');
-        }
-        if (json[0].metadata.Code === 50001) {
-            throw new Error('You must register to create a hotel');
-        }
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
 };
 
@@ -195,10 +180,6 @@ export const deleteHotel = async (hotelId: number): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code === 50001) {
-            throw new Error('The hotel cannot be found');
-        }
-
-        throw new Error(json[0].message);
-    } 
+        throw new ValidationError(getResponseErrors(json as BadRequest));
+    }
 };

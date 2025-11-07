@@ -1,3 +1,6 @@
+import { ValidationError } from "../errors/validation-error";
+import { getResponseErrors, type BadRequest } from "./response-map";
+
 const API_BASE = 'https://localhost:7079/api/';
 
 export interface RoomListItem {
@@ -46,7 +49,7 @@ export const getRoom = async (roomId: Number): Promise<RoomData> => {
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -67,7 +70,7 @@ export const getRoomsByHotel = async (hotelId: Number, startDate: string | null,
     const data = await response.json();
 
     if (!response.ok) {
-        throw new Error(data[0].metadata.Code);
+        throw new ValidationError(getResponseErrors(data as BadRequest));
     }
 
     return data;
@@ -89,22 +92,7 @@ export const createRoom = async (data: CreateRoomData): Promise<CreateRoomRespon
     const json = await response.json();
 
     if (!response.ok) {
-        if (json[0].metadata.Code === 50005) {
-            throw new Error(`Field 'Room name' cannot be empty`);
-        }
-        if (json[0].metadata.Code === 50006) {
-            throw new Error(`Field 'Room price' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50007) {
-            throw new Error(`Field 'Room quantity' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50008) {
-            throw new Error(`Field 'Guests number' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50009) {
-            throw new Error(`Field 'Room size' cannot be empty, equal or less than 0`);
-        }
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
     return json;
 };
@@ -125,25 +113,7 @@ export const updateRoom = async (roomId: number, data: UpdateRoomData): Promise<
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code === 50005) {
-            throw new Error(`Field 'Room name' cannot be empty`);
-        }
-        if (json[0].metadata.Code === 50006) {
-            throw new Error(`Field 'Room price' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50007) {
-            throw new Error(`Field 'Room quantity' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50008) {
-            throw new Error(`Field 'Guests number' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50009) {
-            throw new Error(`Field 'Room size' cannot be empty, equal or less than 0`);
-        }
-        if (json[0].metadata.Code === 50011) {
-            throw new Error(`A room that belongs to this hotel and owned by this user cannot be found`);
-        }
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
 };
 
@@ -161,10 +131,6 @@ export const deleteRoom = async (roomId: number): Promise<void> => {
 
     if (!response.ok) {
         const json = await response.json();
-        if (json[0].metadata.Code === 50011) {
-            throw new Error('A room that belongs to this hotel and owned by this user cannot be found');
-        }
-
-        throw new Error(json[0].message);
+        throw new ValidationError(getResponseErrors(json as BadRequest));
     }
 };

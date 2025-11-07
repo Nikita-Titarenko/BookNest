@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { deleteRoomBooking, getRoomBookingsByUser, type RoomBookingByUserData } from '../../api/user-room';
+import { ValidationError } from '../../errors/validation-error';
 
 const MyBookings: React.FC = () => {
     const [myBookings, setMyBookings] = useState<RoomBookingByUserData[]>([]);
@@ -25,8 +26,8 @@ const MyBookings: React.FC = () => {
             setMyBookings(roomBookings);
         }
         catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
+            if (err instanceof ValidationError) {
+                setError(err.errors[0].message);
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿using System.Security.Claims;
+using AutoMapper;
 using BookNest.Application.Dtos.Rooms;
 using BookNest.Application.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -8,31 +9,36 @@ namespace BookNest.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoomsController : ControllerBase
+    public class RoomsController : BaseController
     {
         private readonly IRoomService _roomService;
+        private readonly IMapper _mapper;
 
-        public RoomsController(IRoomService roomService)
+        public RoomsController(IRoomService roomService, IMapper mapper)
         {
             _roomService = roomService;
+            _mapper = mapper;
         }
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> CreateRoomAsync(CreateRoomDto dto)
+        public async Task<IActionResult> CreateRoom(CreateRoomRequestModel request)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-            var result = await _roomService.CreateRoomAsync(dto, Convert.ToInt32(userId));
+            var result = await _roomService.CreateRoomAsync(_mapper.Map<CreateRoomDto>(request), GetUserId());
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(MapErrors(result.Errors));
             }
 
             var room = result.Value;
 
             return CreatedAtAction(
-                nameof(GetRoomAsync),
+                nameof(GetRoom),
                 new { id = room.RoomId },
                 room
             );
@@ -40,14 +46,17 @@ namespace BookNest.Server.Controllers
 
         [HttpPut("{id}")]
         [Authorize]
-        public async Task<IActionResult> UpdateRoomAsync(int id, RoomDto dto)
+        public async Task<IActionResult> UpdateRoom(int id, RoomRequestModel request)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
 
-            var result = await _roomService.UpdateRoomAsync(id, dto, Convert.ToInt32(userId));
+            var result = await _roomService.UpdateRoomAsync(id, _mapper.Map<RoomDto>(request), GetUserId());
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(MapErrors(result.Errors));
             }
 
             return NoContent();
@@ -55,38 +64,36 @@ namespace BookNest.Server.Controllers
 
         [HttpDelete("{id}")]
         [Authorize]
-        public async Task<IActionResult> DeleteHotelAsync(int id)
+        public async Task<IActionResult> DeleteHotel(int id)
         {
-            string userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-
-            var result = await _roomService.DeleteRoomAsync(id, Convert.ToInt32(userId));
+            var result = await _roomService.DeleteRoomAsync(id, GetUserId());
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(MapErrors(result.Errors));
             }
 
             return NoContent();
         }
 
         [HttpGet("by-hotel")]
-        public async Task<IActionResult> GetRoomsByHotelAsync(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!, int? guestsNumber = null!)
+        public async Task<IActionResult> GetRoomsByHotel(int hotelId, DateTime? startDateTime = null!, DateTime? endDateTime = null!, int? guestsNumber = null!)
         {
             var result = await _roomService.GetRoomsByHotelAsync(hotelId, startDateTime, endDateTime, guestsNumber);
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(MapErrors(result.Errors));
             }
 
             return Ok(result.Value);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRoomAsync(int id)
+        public async Task<IActionResult> GetRoom(int id)
         {
             var result = await _roomService.GetRoomAsync(id);
             if (!result.IsSuccess)
             {
-                return BadRequest(result.Errors);
+                return BadRequest(MapErrors(result.Errors));
             }
 
             return Ok(result.Value);

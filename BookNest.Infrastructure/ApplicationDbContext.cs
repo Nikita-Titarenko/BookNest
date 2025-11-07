@@ -25,7 +25,7 @@ public partial class ApplicationDbContext : DbContext
 
     public DbSet<CreateRoomResultDto> CreateRoomResults { get; set; }
 
-    public DbSet<AppUserDto> AppUserDtos { get; set; }
+    public DbSet<CreateAppUserResultDto> CreateAppUserResults { get; set; }
 
     public int? Login(string email, string password)
     {
@@ -79,6 +79,14 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.RoomId).HasColumnName("room_id");
             entity.Property(e => e.StartDate).HasColumnName("start_date");
             entity.Property(e => e.EndDate).HasColumnName("end_date");
+        });
+
+        modelBuilder.Entity<AppUserDto>(entity =>
+        {
+            entity.HasNoKey();
+            entity.Property(e => e.AppUserEmail).HasColumnName("app_user_email");
+            entity.Property(e => e.AppUserFullname).HasColumnName("app_user_fullname");
+            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number");
         });
 
         modelBuilder.Entity<HotelDto>(entity =>
@@ -260,7 +268,7 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.AppUserId).HasColumnName("app_user_id");
         });
 
-        modelBuilder.Entity<AppUserDto>(entity =>
+        modelBuilder.Entity<CreateAppUserResultDto>(entity =>
         {
             entity.HasNoKey();
             entity.Property(e => e.AppUserId).HasColumnName("app_user_id");

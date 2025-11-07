@@ -1,6 +1,15 @@
 import { useEffect, useState, type FormEvent } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { updateRoom, getRoom } from '../../api/room';
+import { ValidationError } from '../../errors/validation-error';
+
+interface FormErrors {
+    roomName?: string;
+    roomPrice?: string;
+    roomQuantity?: string;
+    guestsNumber?: string;
+    roomSize?: string;
+}
 
 const EditRoom: React.FC = () => {
     const [roomName, setRoomName] = useState('');
@@ -13,7 +22,9 @@ const EditRoom: React.FC = () => {
 
     const [roomSize, setRoomSize] = useState<number | null>();
 
-    const [error, setError] = useState('');
+    const [errors, setErrors] = useState<FormErrors>({});
+
+    const [generalError, setGeneralError] = useState('');
 
     const navigate = useNavigate();
 
@@ -41,14 +52,14 @@ const EditRoom: React.FC = () => {
 
         try {
             if (!roomPrice || !roomQuantity || !guestsNumber || !roomSize) {
-                setError('All fields must be entered');
+                setGeneralError('All fields must be entered');
                 return;
             }
             const roomId = searchParams.get('room-id');
             const parseRoomId = Number(roomId);
             const hotelId = searchParams.get('hotel-id');
             if (!roomId) {
-                setError('Room id not specified');
+                setGeneralError('Room id not specified');
                 return;
             }
             await updateRoom(parseRoomId, { roomPrice, roomName, guestsNumber, roomQuantity, roomSize });
@@ -58,8 +69,16 @@ const EditRoom: React.FC = () => {
             navigate(`/rooms-by-hotel?id=${hotelId}`);
         }
         catch (err) {
-            if (err instanceof Error) {
-                setError(err.message);
+            if (err instanceof ValidationError) {
+                const fieldErrors: FormErrors = {};
+                err.errors.forEach(e => {
+                    if (e.field) {
+                        fieldErrors[e.field as keyof FormErrors] = e.message;
+                    } else {
+                        setGeneralError(e.message);
+                    }
+                });
+                setErrors(fieldErrors);
             }
         }
     }
@@ -69,32 +88,37 @@ const EditRoom: React.FC = () => {
             <form onSubmit={handleSubmit} className="my-auto vertical gap-3">
                 <input
                     type="text"
-                    placeholder="Hotel name"
+                    placeholder="Room name"
                     value={roomName}
                     onChange={(e) => setRoomName(e.target.value)} />
+                {errors.roomName && <p className="error">{errors.roomName}</p>}
                 <input
                     type="number"
                     placeholder="Price (UAH)"
                     value={roomPrice === null ? '' : roomPrice}
                     onChange={(e) => setRoomPrice(Number(e.target.value))} />
+                {errors.roomPrice && <p className="error">{errors.roomPrice}</p>}
                 <input
                     type="number"
                     placeholder="Room quantity"
                     value={roomQuantity === null ? '' : roomQuantity}
                     onChange={(e) => setRoomQuantity(Number(e.target.value))} />
+                {errors.roomQuantity && <p className="error">{errors.roomQuantity}</p>}
                 <input
                     type="number"
                     placeholder="Size (m&sup2;)"
                     step="any"
                     value={roomSize === null ? '' : roomSize}
                     onChange={(e) => setRoomSize(Number(e.target.value))} />
+                {errors.roomSize && <p className="error">{errors.roomSize}</p>}
                 <input
                     type="number"
                     placeholder="Guests number"
                     value={guestsNumber === null ? '' : guestsNumber}
                     onChange={(e) => setGuestsNumber(Number(e.target.value))} />
+                {errors.guestsNumber && <p className="error">{errors.guestsNumber}</p>}
                 <button type="submit" className="btn btn-primary">Edit room</button>
-                <p>{error}</p>
+                <p>{generalError}</p>
             </form>
         </div>
     );
