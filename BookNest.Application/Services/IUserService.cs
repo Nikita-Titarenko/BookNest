@@ -1,4 +1,4 @@
-﻿using BookNest.Application.Dtos;
+﻿using BookNest.Application.Dtos.AppUsers;
 using FluentResults;
 
 namespace BookNest.Application.Services

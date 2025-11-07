@@ -1,4 +1,4 @@
-﻿using BookNest.Application.Dtos;
+﻿using BookNest.Application.Dtos.Rooms;
 using FluentResults;
 
 namespace BookNest.Application.Services

@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using BookNest.Application.Dtos;
+using BookNest.Application.Dtos.Hotels;
 using BookNest.Application.Services;
 using BookNest.Server.Responses;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

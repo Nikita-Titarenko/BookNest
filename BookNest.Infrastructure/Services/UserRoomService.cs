@@ -1,4 +1,4 @@
-﻿using BookNest.Application.Dtos;
+﻿using BookNest.Application.Dtos.AppUserRooms;
 using BookNest.Application.Services;
 using FluentResults;
 using Microsoft.Data.SqlClient;

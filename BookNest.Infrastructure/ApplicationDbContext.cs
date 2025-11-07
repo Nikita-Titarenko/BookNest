@@ -1,4 +1,7 @@
-﻿using BookNest.Application.Dtos;
+﻿using BookNest.Application.Dtos.AppUserRooms;
+using BookNest.Application.Dtos.AppUsers;
+using BookNest.Application.Dtos.Hotels;
+using BookNest.Application.Dtos.Rooms;
 using Microsoft.EntityFrameworkCore;
 
 namespace BookNest.Infrastructure;

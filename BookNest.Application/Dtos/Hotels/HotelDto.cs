@@ -1,4 +1,4 @@
-﻿namespace BookNest.Application.Dtos
+﻿namespace BookNest.Application.Dtos.Hotels
 {
     public class HotelDto
     {

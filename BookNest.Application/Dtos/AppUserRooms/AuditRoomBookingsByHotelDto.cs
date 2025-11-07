@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BookNest.Application.Dtos
+namespace BookNest.Application.Dtos.AppUserRooms
 {
     public class AuditRoomBookingsByHotelDto
     {

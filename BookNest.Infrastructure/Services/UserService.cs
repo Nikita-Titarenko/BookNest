@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Data;
-using BookNest.Application.Dtos;
+using BookNest.Application.Dtos.AppUsers;
 using BookNest.Application.Services;
 using FluentResults;
 using Microsoft.Data.SqlClient;

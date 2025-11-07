@@ -1,5 +1,5 @@
 ﻿using System.Data;
-using BookNest.Application.Dtos;
+using BookNest.Application.Dtos.Rooms;
 using BookNest.Application.Services;
 using FluentResults;
 using Microsoft.Data.SqlClient;

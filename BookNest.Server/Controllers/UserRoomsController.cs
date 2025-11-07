@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using BookNest.Application.Dtos;
+using BookNest.Application.Dtos.AppUserRooms;
 using BookNest.Application.Services;
 using BookNest.Infrastructure.Services;
 using FluentResults;

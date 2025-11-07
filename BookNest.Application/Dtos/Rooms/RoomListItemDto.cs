@@ -1,15 +1,12 @@
-﻿namespace BookNest.Application.Dtos
+﻿namespace BookNest.Application.Dtos.Rooms
 {
-    public class RoomDto
+    public class RoomListItemDto
     {
+        public int RoomId { get; set; }
         public string RoomName { get; set; } = string.Empty;
-
         public int RoomPrice { get; set; }
-
-        public int RoomQuantity { get; set; }
-
-        public int GuestsNumber { get; set; }
-
         public decimal RoomSize { get; set; }
+        public int RoomQuantity { get; set; }
+        public int GuestsNumber { get; set; }
     }
 }

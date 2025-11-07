@@ -1,5 +1,5 @@
 ﻿using System.Security.Claims;
-using BookNest.Application.Dtos;
+using BookNest.Application.Dtos.Rooms;
 using BookNest.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
